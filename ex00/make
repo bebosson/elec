@@ -1,0 +1,20 @@
+#include <avr/io.h>
+
+int main()
+{
+	int a;
+	long int j = F_CPU / 10;
+	long int i = j;
+	a = 0;
+	for (;;)
+	{
+		DDRB |= (1 << a); 
+		PORTB ^= (1 << a);
+		a += (a > 3) ? 0 : 1;
+		while (i--);
+//		DDRB = 0;
+//		PORTB = 0;
+//		i = j;
+	}
+	return(0);
+}

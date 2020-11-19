@@ -7,8 +7,8 @@ int main()
 	long int i = j;
 	for (;;)
 	{
-		DDRB |= (1 << 3);
-		PORTB ^= (1 << 3);
+		DDRB |= (1 << 1);
+		PORTB ^= (1 << 1);
 		while (i--);
 		i = j;
 	}

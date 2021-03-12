@@ -245,6 +245,19 @@ void testdrawchar(void) {
   display.display();
   delay(2000);
 }
+
+void testdraw(void) {
+  display.clearDisplay();
+
+  display.setTextSize(1);      // Normal 1:1 pixel scale
+  display.setTextColor(SSD1306_WHITE); // Draw white text
+  display.setCursor(0, 0);     // Start at top-left corner
+  display.cp437(true);         // Use full 256 char 'Code Page 437' font
+  display.write('@');
+  display.display();
+  delay(4000);
+}
+
 void testdrawchar_nbr(void) {
   display.clearDisplay();
 
@@ -390,9 +403,9 @@ void    hw_serial_begin(uint64_t baud, uint8_t config)
   //  _written = false; bool in HardwareSerial Class
 
   //set the data bits, parity, and stop bits
-  #if defined(__AVR_ATmega8__)
-    config |= 0x80; // select UCSRC register (shared with UBRRH)
-  #endif
+  // #if defined(__AVR_ATmega8__)
+  //   config |= 0x80; // select UCSRC register (shared with UBRRH)
+  // #endif
     UCSR0C = config;
 
   UCSR0B |= (1 << RXEN0);
@@ -404,7 +417,7 @@ void    hw_serial_begin(uint64_t baud, uint8_t config)
 
 void setup() {
   //Serial.begin(9600);
-  hw_serial_begin(9600, SERIAL_8N1);
+  //hw_serial_begin(9600, SERIAL_8N1);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC)) {

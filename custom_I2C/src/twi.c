@@ -18,10 +18,11 @@
 #include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
+#include "avr/io.h"
+#include "avr/interrupt.h"
+#include <stdbool.h>
 // #include <compat/twi.h>
-#include "Arduino.h" // for digitalWrite
+// #include "Arduino.h" // for digitalWrite
 
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
@@ -69,8 +70,11 @@ void twi_init(void)
   twi_inRepStart = false;
   
   // activate internal pullups for twi.
-  digitalWrite(SDA, 1);
-  digitalWrite(SCL, 1);
+  //   digitalWrite(SCL, 1);
+  //   digitalWrite(SDA, 1);
+  PORTC |= (1 << SDA);
+  PORTC |= (1 << SCL);
+
 
   // initialize twi prescaler and bit rate
   cbi(TWSR, TWPS0);
@@ -188,7 +192,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
 {
   uint8_t i;
-
+uart_tx('1');
   // ensure data will fit into buffer
   if(TWI_BUFFER_LENGTH < length){
     return 1;
@@ -202,7 +206,6 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
   twi_sendStop = sendStop;
   // reset error state (0xFF.. no error occured)
   twi_error = 0xFF;
-
   // initialize buffer iteration vars
   twi_masterBufferIndex = 0;
   twi_masterBufferLength = length;
@@ -233,12 +236,12 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
   else
     // send start condition
     TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE) | _BV(TWSTA);	// enable INTs
-
+    uart_tx('2');
   // wait for write operation to complete
   while(wait && (TWI_MTX == twi_state)){
     continue;
   }
-  
+  uart_tx('3');
   if (twi_error == 0xFF)
     return 0;	// success
   else if (twi_error == TW_MT_SLA_NACK)

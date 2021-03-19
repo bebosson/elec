@@ -1,4 +1,5 @@
 #include <inttypes.h>
+
 void uart_init();
 void uart_tx(char c);
 void uart_strx(char *str);

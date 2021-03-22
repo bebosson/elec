@@ -192,7 +192,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
 uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
 {
   uint8_t i;
-uart_tx('1');
+// uart_tx('1');
   // ensure data will fit into buffer
   if(TWI_BUFFER_LENGTH < length){
     return 1;
@@ -236,20 +236,28 @@ uart_tx('1');
   else
     // send start condition
     TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE) | _BV(TWSTA);	// enable INTs
-    uart_tx('2');
+    // uart_tx('2');
   // wait for write operation to complete
   while(wait && (TWI_MTX == twi_state)){
     continue;
   }
-  uart_tx('3');
-  if (twi_error == 0xFF)
-    return 0;	// success
-  else if (twi_error == TW_MT_SLA_NACK)
+//   uart_tx('3');
+  if (twi_error == 0xFF) {
+    //   uart_strx(" ret0k ");
+      return 0;	// success
+  }
+  else if (twi_error == TW_MT_SLA_NACK) {
+    //   uart_strx(" ErrSLA ");
     return 2;	// error: address send, nack received
-  else if (twi_error == TW_MT_DATA_NACK)
-    return 3;	// error: data send, nack received
-  else
-    return 4;	// other twi error
+  }
+  else if (twi_error == TW_MT_DATA_NACK)  {
+    //   uart_strx(" ErrDATA ");
+        return 3;	// error: data send, nack received
+  }
+  else {
+    //   uart_strx(" Err4");
+          return 4;	// other twi error
+  }
 }
 
 /* 
@@ -364,15 +372,19 @@ ISR(TWI_vect)
   switch(TW_STATUS){
     // All Master
     case TW_START:     // sent start condition
+    // uart_strx(" c1 ");
     case TW_REP_START: // sent repeated start condition
       // copy device address and r/w bit to output register and ack
+    //   uart_strx(" c2 ");
       TWDR = twi_slarw;
       twi_reply(1);
       break;
 
     // Master Transmitter
     case TW_MT_SLA_ACK:  // slave receiver acked address
+        // uart_strx(" c3 ");
     case TW_MT_DATA_ACK: // slave receiver acked data
+        // uart_strx(" c4 ");
       // if there is data to send, send it, otherwise stop 
       if(twi_masterBufferIndex < twi_masterBufferLength){
         // copy data to output register and ack
@@ -392,23 +404,28 @@ ISR(TWI_vect)
       }
       break;
     case TW_MT_SLA_NACK:  // address sent, nack received
+        // uart_strx(" c4 ");
       twi_error = TW_MT_SLA_NACK;
       twi_stop();
       break;
     case TW_MT_DATA_NACK: // data sent, nack received
+        // uart_strx(" c5 ");
       twi_error = TW_MT_DATA_NACK;
       twi_stop();
       break;
     case TW_MT_ARB_LOST: // lost bus arbitration
+        // uart_strx(" c6 ");
       twi_error = TW_MT_ARB_LOST;
       twi_releaseBus();
       break;
 
     // Master Receiver
     case TW_MR_DATA_ACK: // data received, ack sent
+        // uart_strx(" c7 ");
       // put byte into buffer
       twi_masterBuffer[twi_masterBufferIndex++] = TWDR;
     case TW_MR_SLA_ACK:  // address sent, ack received
+        // uart_strx(" c8 ");
       // ack if more bytes are expected, otherwise nack
       if(twi_masterBufferIndex < twi_masterBufferLength){
         twi_reply(1);
@@ -417,6 +434,7 @@ ISR(TWI_vect)
       }
       break;
     case TW_MR_DATA_NACK: // data received, nack sent
+        // uart_strx(" c9 ");
       // put final byte into buffer
       twi_masterBuffer[twi_masterBufferIndex++] = TWDR;
 	if (twi_sendStop)
@@ -431,15 +449,20 @@ ISR(TWI_vect)
 	}    
 	break;
     case TW_MR_SLA_NACK: // address sent, nack received
+        // uart_strx(" c10 ");
       twi_stop();
       break;
     // TW_MR_ARB_LOST handled by TW_MT_ARB_LOST case
 
     // Slave Receiver
     case TW_SR_SLA_ACK:   // addressed, returned ack
+    // uart_strx(" c10.1 ");
     case TW_SR_GCALL_ACK: // addressed generally, returned ack
+    // uart_strx(" c10.2 ");
     case TW_SR_ARB_LOST_SLA_ACK:   // lost arbitration, returned ack
+    // uart_strx(" c10.3 ");
     case TW_SR_ARB_LOST_GCALL_ACK: // lost arbitration, returned ack
+        // uart_strx(" c11 ");
       // enter slave receiver mode
       twi_state = TWI_SRX;
       // indicate that rx buffer can be overwritten and ack
@@ -447,7 +470,9 @@ ISR(TWI_vect)
       twi_reply(1);
       break;
     case TW_SR_DATA_ACK:       // data received, returned ack
+        // uart_strx(" c12 ");
     case TW_SR_GCALL_DATA_ACK: // data received generally, returned ack
+        // uart_strx(" c13 ");
       // if there is still room in the rx buffer
       if(twi_rxBufferIndex < TWI_BUFFER_LENGTH){
         // put byte in buffer and ack
@@ -459,6 +484,7 @@ ISR(TWI_vect)
       }
       break;
     case TW_SR_STOP: // stop or repeated start condition received
+        // uart_strx(" c14 ");
       // put a null char after data if there's room
       if(twi_rxBufferIndex < TWI_BUFFER_LENGTH){
         twi_rxBuffer[twi_rxBufferIndex] = '\0';
@@ -473,14 +499,18 @@ ISR(TWI_vect)
       twi_releaseBus();
       break;
     case TW_SR_DATA_NACK:       // data received, returned nack
+    // uart_strx(" c14.1 ");
     case TW_SR_GCALL_DATA_NACK: // data received generally, returned nack
       // nack back at master
+    //   uart_strx(" c15 ");
       twi_reply(0);
       break;
     
     // Slave Transmitter
     case TW_ST_SLA_ACK:          // addressed, returned ack
+    // uart_strx(" c15.1 ");
     case TW_ST_ARB_LOST_SLA_ACK: // arbitration lost, returned ack
+    // uart_strx(" c16 ");
       // enter slave transmitter mode
       twi_state = TWI_STX;
       // ready the tx buffer index for iteration
@@ -497,6 +527,7 @@ ISR(TWI_vect)
       }
       // transmit first byte from buffer, fall
     case TW_ST_DATA_ACK: // byte sent, ack returned
+        // uart_strx(" c17 ");
       // copy data to output register
       TWDR = twi_txBuffer[twi_txBufferIndex++];
       // if there is more to send, ack, otherwise nack
@@ -507,7 +538,9 @@ ISR(TWI_vect)
       }
       break;
     case TW_ST_DATA_NACK: // received nack, we are done 
+    // uart_strx(" c17.1 ");
     case TW_ST_LAST_DATA: // received ack, but we are done already!
+        // uart_strx(" c18 ");
       // ack future responses
       twi_reply(1);
       // leave slave receiver state
@@ -516,8 +549,10 @@ ISR(TWI_vect)
 
     // All
     case TW_NO_INFO:   // no state information
+    // uart_strx(" c18.1 ");
       break;
     case TW_BUS_ERROR: // bus error, illegal stop/start
+    // uart_strx(" c18.2 ");
       twi_error = TW_BUS_ERROR;
       twi_stop();
       break;

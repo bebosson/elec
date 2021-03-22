@@ -31,27 +31,31 @@ uint16_t  getTemperature() {
     uint8_t tx_address = DEFAULT_I2C_ADDRESS;
     uint8_t rx_data;
     uint16_t temperature;
-    uart_tx('B');
+    // uart_tx('B');
    twi_writeTo(tx_address, 0x00, 1, true, true);
-   uart_tx('C');
+//    uart_tx('C');
    twi_readFrom(tx_address, &rx_data, 2, true);
    twi_writeTo(tx_address, 0, 0, true, true);
     return *(int16_t *)(&rx_data);
 }
 
 int       main() {
+    SREG |= (1 << SREG_I);
     // twi_init();
     uint16_t temp;
     uart_init();
-    char c = 'A';
     // ft_delay(F_CPU / 25);
     while(1) {
-        uart_tx(c);
+        uart_tx('>');
+        // uart_strx(" | while start | ");
         uint32_t i = F_CPU / 25;
         while (i-- > 0) {};
         temp = getTemperature();
-        // uart_putnbr((uint32_t)temp);
-
+        i = F_CPU / 25;
+        // while (i-- > 0) {};
+        uart_strx(" | TEMP IS :");
+        uart_putnbr((uint32_t)temp);
+        uart_strx(" | end | ");
     }
     return 0;
 }

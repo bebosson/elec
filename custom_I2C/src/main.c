@@ -29,33 +29,65 @@
 uint16_t  getTemperature() {
     //send start and ask data register to slave
     uint8_t tx_address = DEFAULT_I2C_ADDRESS;
-    uint8_t rx_data;
-    uint16_t temperature;
+    uint8_t rx_data[TWI_BUFFER_LENGTH];
+    // uint16_t temperature = 0;
+    uint8_t i = 0;
+    while (i < TWI_BUFFER_LENGTH) {
+        rx_data[i++] = 0;
+    }
     // uart_tx('B');
-   twi_writeTo(tx_address, 0x00, 1, true, true);
-//    uart_tx('C');
-   twi_readFrom(tx_address, &rx_data, 2, true);
-   twi_writeTo(tx_address, 0, 0, true, true);
-    return *(int16_t *)(&rx_data);
+    twi_writeTo(tx_address, 0x00, 1, true, true);
+    //uart_tx('C');
+    uint8_t read = twi_readFrom(tx_address, &(rx_data[0]), 2, true);
+    // temperature = ((uint16_t)(*rx_data)) << 8;
+    // uint16_t t2 = (uint16_t)(rx_data[1]);
+    // temperature = temperature | t2;
+    twi_writeTo(tx_address, 0, 0, true, true);
+    // uart_tx('#');
+    // uart_putnbr8(rx_data[twi_txBufferIndex]);
+    // uart_tx('-');
+    // uart_putnbr8(rx_data[twi_txBufferIndex - 1]);
+    // uart_tx('!');
+    // uart_tx('>');
+    // uart_putnbr8(rx_data[0]);
+    // uart_tx('|');
+    // uart_putnbr8(rx_data[1]);
+    // uart_tx('<');
+    // uart_putnbr(temperature);
+    // uart_tx('!');
+
+    return *(int16_t *)(rx_data);
+}
+
+uint8_t *uart_print_temp(uint16_t val) {
+    uint8_t *byte = &val;
+    uint8_t temperature = (*byte & 0b01111111);
+    uint8_t is_negative = (*byte >> 7) ? 1 : 0;
+    byte++;
+    uint8_t is_point_five = (*byte >> 7) ? 1 : 0;
+    if(is_negative) {
+        uart_tx('-');
+    }
+    uart_putnbr8(temperature);
+    if(is_point_five) {
+        uart_strx(".5");
+    }
+    uart_strx(" C.deg");
+
 }
 
 int       main() {
     SREG |= (1 << SREG_I);
     // twi_init();
-    uint16_t temp;
+    uint16_t temp = 0;
     uart_init();
-    // ft_delay(F_CPU / 25);
     while(1) {
-        uart_tx('>');
-        // uart_strx(" | while start | ");
+        // uart_tx('>');
         uint32_t i = F_CPU / 25;
         while (i-- > 0) {};
-        temp = getTemperature();
-        i = F_CPU / 25;
-        // while (i-- > 0) {};
-        uart_strx(" | TEMP IS :");
-        uart_putnbr((uint32_t)temp);
-        uart_strx(" | end | ");
+        uart_strx("TEMP IS : ");
+        uart_print_temp(getTemperature());
+        uart_strx(" | ");
     }
     return 0;
 }

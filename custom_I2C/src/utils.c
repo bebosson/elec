@@ -27,7 +27,17 @@ void uart_strx(char *str) {
     }
 }
 
-void uart_putnbr(uint32_t nb) {
+void uart_putnbr(uint16_t nb) {
+	if (nb >= 10)
+	{
+		uart_putnbr(nb / 10);
+		uart_putnbr(nb % 10);
+	}
+	else
+		uart_tx(nb + '0');
+}
+
+void uart_putnbr8(uint8_t nb) {
 	if (nb >= 10)
 	{
 		uart_putnbr(nb / 10);

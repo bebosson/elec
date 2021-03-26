@@ -1,0 +1,26 @@
+{
+    "files.associations": {
+        "inttypes.h": "c",
+        "math.h": "c",
+        "stdlib.h": "c",
+        "main.h": "c",
+        "pins_arduino.h": "c",
+        "pgmspace.h": "c",
+        "twi.h": "c",
+        "io.h": "c",
+        "interrupt.h": "c",
+        "utils.h": "c",
+        "stdbool.h": "c",
+        "eeprom.h": "c",
+        "myeeprom.h": "c",
+        "string.h": "c",
+        "imxrt.h": "c",
+        "stdint.h": "c",
+        "avr_functions.h": "c",
+        "iusart0.h": "c",
+        "stdusart0.h": "c",
+        "usartcommon.h": "c",
+        "ioat94k.h": "c",
+        "stdio.h": "c"
+    }
+}

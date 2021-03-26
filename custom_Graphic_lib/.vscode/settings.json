@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "inttypes.h": "c",
+        "math.h": "c",
+        "stdlib.h": "c",
+        "main.h": "c",
+        "pins_arduino.h": "c",
+        "pgmspace.h": "c",
+        "twi.h": "c",
+        "io.h": "c",
+        "interrupt.h": "c",
+        "utils.h": "c",
+        "stdbool.h": "c",
+        "sfr_defs.h": "c",
+        "sstream": "c",
+        "common.h": "c"
+    }
+}

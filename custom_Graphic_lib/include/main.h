@@ -1,8 +1,12 @@
 #include <stdbool.h>
+#include "avr/interrupt.h"
 #include <inttypes.h>
 #include "twi.h"
 #include "utils.h"
 #include "screen.h"
+#include "eeprom.h"
+#include "avr/io.h"
+
 
 #define DEFAULT_I2C_ADDRESS 0x48;
 #define BUFFER_LENGTH 32

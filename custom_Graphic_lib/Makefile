@@ -38,9 +38,10 @@ hex:
 flash:
 		$(DUDE) -v -p $(MCU) -c arduino -P $(PORT) -b 57600 -U flash:w:$(EXE).hex:i
 clean:
-	rm $(SRC).o
-	rm $(SRC).bin
-	rm $(SRC).hex
+	rm $(OBJ_DIR)/*.o
+fclean:
+	rm $(BIN_DIR)/*
+re: clean fclean all
 ks:
 	kill -3 $(SCREEN_PID)
 

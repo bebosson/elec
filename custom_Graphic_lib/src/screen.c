@@ -1,5 +1,4 @@
 #include "avr/io.h"
-#include "screen.h"
 
 char buffer_text[8][21];
 
@@ -118,11 +117,13 @@ void    put_str(char *str, char x, char y) {
     }
 }
 
-void putnbr(uint8_t nb, char x, char y) {
+void putnbr(unsigned int nb, char x, char y) {
     char *text = &buffer_text[y][x];
     if (nb >= 100)
     {
         *text++ = nb / 100 + 27;
+        if (nb % 100 < 10)
+            *text++ = 27;
         nb %= 100;
     }
     if (nb >= 10)
@@ -131,7 +132,7 @@ void putnbr(uint8_t nb, char x, char y) {
         nb %= 10;
     }
     if (nb >= 0)
-        *text = nb + 27;
+        *text++ = nb + 27;
 }
 
 
@@ -144,6 +145,10 @@ void    clear_buffer() {
     }
 }
 
+void    clear_screen() {
+    clear_buffer();
+    print_screen();
+}
 
 void    print_screen() {
     PORTD &= ~(1 << PD6); // set command mode
@@ -195,7 +200,7 @@ void    display_init() {
     DDRB |= (1 << PB3);         // pinMode(MOSI, OUTPUT);
 
 
-    PORTB |= (1 << PB0);
+    PORTB |= (1 << PB0); // pin reset ssd1306
     PORTD &= ~(1 << PD6); // set command mode
 
     uint8_t cnt = 0; // sequence initialisation init_seq
@@ -210,3 +215,4 @@ void    display_init() {
     clear_buffer();
     
 }
+

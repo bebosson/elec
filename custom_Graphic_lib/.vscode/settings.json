@@ -13,6 +13,8 @@
         "stdbool.h": "c",
         "sfr_defs.h": "c",
         "sstream": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "screen.h": "c",
+        "eeprom.h": "c"
     }
 }

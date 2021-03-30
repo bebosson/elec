@@ -1,5 +1,102 @@
 #include "main.h"
-#include "screen.h"
+
+
+extern char font[96][6];
+char    chosen_specie; //flag of chosen species
+char    transition;
+volatile char    choosing;
+
+
+uint8_t   clean_transition()
+{
+    for (uint8_t i = 0; i < 8; i++)
+        put_str("                    ", 0, i);
+    return (1);
+}
+
+void    transition_menu(uint8_t *x, uint8_t *y)
+{
+    if (*x == 8)
+        *x = 19;
+    else if (*x == 19)
+        *x = 8;
+}
+
+
+
+void   navigation_button(uint8_t *x, uint8_t *y)
+{
+    
+    if (PIND & (1 << PD4)) //boutton du bas
+    {
+        put_str(" ",*x, *y);
+        (*y)++;
+        if (*y > 7)
+        {
+            transition_menu(x, y);
+            *y = 3;
+        }
+//        PIND ^= ~(1 << PD4); rebond ? 
+    }
+    if (PIND & (1 << PD5)) // boutton du bas 
+    {
+        put_str(" ",*x, *y);
+        (*y)--;
+        if (*y < 3)
+        {
+            transition_menu(x, y);
+            *y = 7;
+        }
+//        PIND ^= ~(1 << PD5); rebond ? 
+    }
+}
+
+void    render_title()
+{
+    put_str("CHOISISSEZ VOTRE", 2, 0);
+    put_str("ESPECE", 7, 1);
+}
+
+void    render_champ()
+{
+    uint8_t spec[8];
+    render_title();
+    eeprom_read_page(0, 8, spec);
+    put_str(spec,0,3);
+    eeprom_read_page(18, 8, spec);
+    put_str(spec,0,4);
+    // eeprom_read_page(18, 18, specie);
+    // put_str(specie,0,4);
+    // eeprom_read_page(36, 18, specie);
+    // put_str(specie,0,5);
+    // put_str("CHAMP 4   ",0,6);
+    // put_str("CHAMP 5   ",0,7); 
+/*  put_str("CHAMP 6   ",10,3);
+    put_str("CHAMP 7   ",10,4);
+    put_str("CHAMP 8   ",10,5);
+    put_str("CHAMP 9   ",10,6);
+    put_str("CHAMP 10   ",10,7); */
+
+}
+
+void    display_menu() //choix espece
+{
+    static uint8_t x = 8;
+    static uint8_t y = 3;
+    navigation_button(&x, &y);
+    render_champ();
+    put_str("<",x, y);
+    // if (PIND & (1 << PORT3))
+    // {
+        // ft_delay(F_CPU / 1000);
+        chosen_specie = (y - 2) + (x == 18 ? 5 : 0); // CHOOSE_SPECIES
+        // return;
+    // }
+    print_screen();
+    return (0);
+}
+
+
 
 uint16_t  getTemperature() {
 
@@ -29,15 +126,16 @@ void    print_temp(uint16_t val) {
     uint8_t is_point_five = (*byte >> 7) ? 1 : 0;
     put_str("TEMPERATURE:        ", 0, 4);
     if(is_negative) {
-        put_str("-",13,4);
+        put_str("-",12,4);
     }
-    putnbr(temperature,14,4);
+    putnbr(temperature,13,4);
     if(is_point_five) {
-        put_str(".5", (temperature < 10) ? 15 : 16,4);
+        put_str(".5", (temperature < 10) ? 14 : 15,4);
     } else {
-        put_str(".0", (temperature < 10) ? 15 : 16,4);
+        put_str(".0", (temperature < 10) ? 14 : 15,4);
     }
-    put_str("oC", (temperature < 10) ? 17 : 18, 4);
+    put_str("oC", (temperature < 10) ? 16 : 17, 4);
+    //test value temp fº specie arrow 
 }
 
 unsigned int read_lux(){
@@ -89,36 +187,58 @@ unsigned int read_temperature(){
     return (nb);
 }
 
-extern char font[96][6];
-int       main() {
+ISR(INT1_vect)
+{   
+    clean_transition();
+    if (choosing) {
+        choosing = 0;
+    } else
+        choosing = 1;
+    ft_delay(F_CPU / 5000);
+}
+
+void    display_info()
+{
     unsigned int lux;
     unsigned int mois;
+    char        memory_species = 18 * (chosen_specie - 1);
+    uint8_t spec[8];
+
+    lux = read_lux();
+    put_str("LUMINOSITE:         ", 0, 0);
+    putnbr(lux, 13, 0);
+    mois = read_moisture();
+    put_str("HUMIDITE:           ", 0, 2);
+    putnbr(mois, 13, 2);
+    print_temp(getTemperature());
+    put_str("ESPECE:   ", 0, 6);
+    eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
+    put_str(spec,11,6);
+    print_screen();
+}
+
+
+int       main() {
+    t_specie *specie;
+    chosen_specie = 0;
+//    EIFR |= (1 << INTF1); //Turn on interrupt INT 1
+ //        // Turns on INT1
+    EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
+    EIMSK |= (1 << INT1);
     ADCSRA |= (1 << ADEN); // enable ADC
     ADMUX |= (1 << REFS0); // VCC -> voltage reference
-   
-    display_init();
+    display_init(); //pin connected to screen 
+    choosing = 1;
+    // eeprom_write_specie();
 
-    
     
     while(1) {
-    lux = read_lux();
-    put_str("LUMINOSITE:    ", 0, 0);
-    putnbr(lux, 14, 0);
-    mois = read_moisture();
-    put_str("HUMIDITE:    ", 0, 2);
-    putnbr(mois, 12, 2);
-    print_temp(getTemperature());
-    print_screen();
-
-    
-        // for (uint8_t i = 0; i < 113; i++)
-        //     SPI_MasterTransmit(i);
+        if (choosing == 1)
+            display_menu();
+        else
+            display_info();
         ft_delay(F_CPU / 1000);
-        // PORTD &= ~(1 << PD6); // set command mode
-        // SPI_MasterTransmit(0x00);
-        // SPI_MasterTransmit(0x10);
-        // PORTD |= (1 << PD6); // set data mode
     }
 
     return 0;

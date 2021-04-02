@@ -2,7 +2,7 @@
 
 void uart_init() {
 	/*Set baud rate to 8 */
-	UBRR0L = (1<<3); //2^3 = 8
+	UBRR0L = 103; //2^3 = 8
 	/*Enable transmitter and receiver*/
 	UCSR0B = (1<<TXEN0) | (1 << RXEN0);
 	/* Set frame format: 8data, 1stop bit */
@@ -36,6 +36,10 @@ int main() {
 	uart_init();
 	UCSR0B |= (1<<RXCIE0); // enable interrupts when data received
 	SREG |= (1<<SREG_I); // enable interrupts
+//	for (int i=0; i < F_CPU / 500; i++){};
 	for(;;) {
+		while (!(UCSR0A & (1<<UDRE0)));
+ 		UDR0 = 'a';
+	//	for (int i=0; i < F_CPU / 500; i++){};
 	}
 }

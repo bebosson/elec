@@ -200,7 +200,7 @@ void    display_init() {
     DDRB |= (1 << PB3);         // pinMode(MOSI, OUTPUT);
 
 
-    PORTB |= (1 << PB0); // pin reset ssd1306
+    PORTB |= (1 << PB0); // pin reset sd1306
     PORTD &= ~(1 << PD6); // set command mode
 
     uint8_t cnt = 0; // sequence initialisation init_seq

@@ -231,7 +231,7 @@ int       main() {
     display_init(); //pin connected to screen 
     choosing = 1;
     // eeprom_write_specie();
-
+    uart_tx('A');
     
     while(1) {
         if (choosing == 1)

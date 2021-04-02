@@ -2,7 +2,7 @@ CC=avr-gcc
 OBJCPY=avr-objcopy
 CFLAGS= -std=c99 -Wall -ffunction-sections
 DUDE = avrdude
-F_CPU=16000000
+F_CPU=8000000
 PORT=/dev/cu.SLAB_USBtoUART
 MCU = atmega328p
 

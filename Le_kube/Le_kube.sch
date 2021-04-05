@@ -34,4 +34,10 @@ U 60669017
 F0 "Sheet60669016" 50
 F1 "ssd1306_128_64.sch" 50
 $EndSheet
+$Sheet
+S 7900 2350 900  850 
+U 606B8EB7
+F0 "Temp_Sensor" 50
+F1 "Temp_Sensor.sch" 50
+$EndSheet
 $EndSCHEMATC

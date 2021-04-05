@@ -7,7 +7,7 @@ F ~
 $ENDCMP
 #
 $CMP AP2112K-3.3
-D The AP2112 is CMOS process low dropout linearregulator with enable function, the regulator deliversa guaranteed 600mA (min.) continuous load current. 
+D The AP2112 is CMOS process low dropout linearregulator with enable function, the regulator deliversa guaranteed 600mA (min.) continuous load current.
 $ENDCMP
 #
 $CMP C
@@ -18,6 +18,12 @@ $ENDCMP
 $CMP D
 D Diode
 K diode
+F ~
+$ENDCMP
+#
+$CMP J1
+D Generic connector, single row, 01x07, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
 F ~
 $ENDCMP
 #

@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 2
+Sheet 1 3
 Title ""
 Date ""
 Rev ""
@@ -33,5 +33,11 @@ S 7650 3550 950  850
 U 60669017
 F0 "Sheet60669016" 50
 F1 "ssd1306_128_64.sch" 50
+$EndSheet
+$Sheet
+S 7900 2350 900  850 
+U 606B8EB7
+F0 "Temp_Sensor" 50
+F1 "Temp_Sensor.sch" 50
 $EndSheet
 $EndSCHEMATC

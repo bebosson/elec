@@ -14,10 +14,12 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Sheet
-S 7900 2350 900  850 
-U 606B8EB7
-F0 "Temp_Sensor" 50
-F1 "Temp_Sensor.sch" 50
+S 6800 2450 950  400 
+U 606BA942
+F0 "Sheet606BA941" 50
+F1 "LM75A_Temp_Sensor.sch" 50
+F2 "SDA" I L 6800 2600 50 
+F3 "SCL" I L 6800 2700 50 
 $EndSheet
 $Sheet
 S 6800 3150 950  850 
@@ -71,4 +73,16 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40001906C.pdf" H 3000 2850 
 	1    3000 2850
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	3600 2950 5250 2950
+Wire Wire Line
+	5250 2950 5250 2600
+Wire Wire Line
+	5250 2600 6800 2600
+Wire Wire Line
+	3600 3050 5350 3050
+Wire Wire Line
+	5350 3050 5350 2700
+Wire Wire Line
+	5350 2700 6800 2700
 $EndSCHEMATC

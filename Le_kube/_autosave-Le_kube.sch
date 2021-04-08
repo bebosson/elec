@@ -72,7 +72,7 @@ NoConn ~ 4350 4750
 $Sheet
 S 8100 2850 950  300 
 U 606BA942
-F0 "Sheet606BA941" 50
+F0 "Thermometre" 50
 F1 "LM75A_Temp_Sensor.sch" 50
 F2 "SDA" I L 8100 2950 50 
 F3 "SCL" I L 8100 3050 50 
@@ -80,7 +80,7 @@ $EndSheet
 $Sheet
 S 8100 3550 1000 600 
 U 60669017
-F0 "Sheet60669016" 50
+F0 "Ecran" 50
 F1 "ssd1306_128_64.sch" 50
 F2 "CS" I L 8100 4050 50 
 F3 "DC" I L 8100 3950 50 
@@ -310,14 +310,6 @@ Wire Wire Line
 Wire Wire Line
 	5850 1650 5850 3650
 Wire Wire Line
-	3600 1950 5700 1950
-Wire Wire Line
-	5700 1950 5700 3750
-Wire Wire Line
-	5700 3750 8100 3750
-Wire Wire Line
-	3600 2150 5550 2150
-Wire Wire Line
 	5550 2150 5550 3850
 Wire Wire Line
 	5550 3850 8100 3850
@@ -401,9 +393,24 @@ Wire Wire Line
 	4150 1250 4400 1250
 Connection ~ 4400 1250
 $Sheet
-S 9050 2200 850  400 
+S 4650 2250 550  200 
 U 608A4ECC
-F0 "Sheet608A4ECB" 50
+F0 "Capteur_humidite" 50
 F1 "Capasitive_sensor.sch" 50
+F2 "AOUT" I L 4650 2350 50 
 $EndSheet
+Wire Wire Line
+	3900 2350 3900 2750
+Wire Wire Line
+	3900 2750 3600 2750
+Wire Wire Line
+	3900 2350 4650 2350
+Wire Wire Line
+	6700 3750 6700 5900
+Wire Wire Line
+	6700 5900 2400 5900
+Wire Wire Line
+	2400 5900 2400 3650
+Wire Wire Line
+	6700 3750 8100 3750
 $EndSCHEMATC

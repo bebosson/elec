@@ -15,6 +15,18 @@ K cap capacitor
 F ~
 $ENDCMP
 #
+$CMP Conn_01x06_Male
+D Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Crystal
+D Two pin crystal
+K quartz ceramic resonator oscillator
+F ~
+$ENDCMP
+#
 $CMP D
 D Diode
 K diode
@@ -67,6 +79,12 @@ $CMP SE555D
 D Precision Timers, 555 compatible, SOIC-8
 K single timer 555
 F http://www.ti.com/lit/ds/symlink/ne555.pdf
+$ENDCMP
+#
+$CMP SW
+D Single Pole Single Throw (SPST) switch, separate symbol
+K switch lever
+F ~
 $ENDCMP
 #
 $CMP TLC555xD

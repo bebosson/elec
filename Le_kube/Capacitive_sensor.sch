@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 5
+Sheet 5 5
 Title ""
 Date ""
 Rev ""
@@ -25,10 +25,10 @@ F 3 "http://www.intersil.com/content/dam/Intersil/documents/icm7/icm7555-56.pdf"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:R R?
+L Kube_library:R R14
 U 1 1 608B0911
 P 7650 2750
-F 0 "R?" V 7604 2838 50  0000 L CNN
+F 0 "R14" V 7604 2838 50  0000 L CNN
 F 1 "10K" V 7695 2838 50  0000 L CNN
 F 2 "" H 7650 2750 50  0001 C CNN
 F 3 "" H 7650 2750 50  0001 C CNN
@@ -51,10 +51,10 @@ $EndComp
 Wire Wire Line
 	7650 2550 7350 2550
 $Comp
-L Kube_library:R R
+L Kube_library:R R13
 U 1 1 608B3772
 P 5900 2350
-F 0 "R" V 5854 2438 50  0000 L CNN
+F 0 "R13" V 5854 2438 50  0000 L CNN
 F 1 "1M" V 5945 2438 50  0000 L CNN
 F 2 "" H 5900 2350 50  0001 C CNN
 F 3 "" H 5900 2350 50  0001 C CNN
@@ -62,10 +62,10 @@ F 3 "" H 5900 2350 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Kube_library:C C?
+L Kube_library:C C17
 U 1 1 608B4227
 P 5550 2350
-F 0 "C?" V 5504 2465 50  0000 L CNN
+F 0 "C17" V 5504 2465 50  0000 L CNN
 F 1 "1µF" V 5595 2465 50  0000 L CNN
 F 2 "" V 5700 2388 50  0001 C CNN
 F 3 "~" H 5550 2350 50  0001 C CNN
@@ -96,10 +96,10 @@ F 3 "" H 3400 4100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:C C?
+L Kube_library:C C15
 U 1 1 608CBCCA
 P 3850 4050
-F 0 "C?" H 3850 4302 50  0000 C CNN
+F 0 "C15" H 3850 4302 50  0000 C CNN
 F 1 "470pF" H 3850 4211 50  0000 C CNN
 F 2 "" V 4000 4088 50  0001 C CNN
 F 3 "~" H 3850 4050 50  0001 C CNN
@@ -107,10 +107,10 @@ F 3 "~" H 3850 4050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:C C
+L Kube_library:C C14
 U 1 1 608CE6B8
 P 3850 3200
-F 0 "C" H 3850 3452 50  0000 C CNN
+F 0 "C14" H 3850 3452 50  0000 C CNN
 F 1 "100nF" H 3850 3361 50  0000 C CNN
 F 2 "" V 4000 3238 50  0001 C CNN
 F 3 "~" H 3850 3200 50  0001 C CNN
@@ -122,10 +122,10 @@ Wire Wire Line
 Wire Wire Line
 	3400 4050 3700 4050
 $Comp
-L Kube_library:R R?
+L Kube_library:R R12
 U 1 1 608D1C5F
 P 4350 4050
-F 0 "R?" H 4350 4275 50  0000 C CNN
+F 0 "R12" H 4350 4275 50  0000 C CNN
 F 1 "1.6K" H 4350 4184 50  0000 C CNN
 F 2 "" H 4350 4050 50  0001 C CNN
 F 3 "" H 4350 4050 50  0001 C CNN
@@ -133,10 +133,10 @@ F 3 "" H 4350 4050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:R R?
+L Kube_library:R R11
 U 1 1 608D3458
 P 4650 3400
-F 0 "R?" V 4696 3322 50  0000 R CNN
+F 0 "R11" V 4696 3322 50  0000 R CNN
 F 1 "330R" V 4605 3322 50  0000 R CNN
 F 2 "" H 4650 3400 50  0001 C CNN
 F 3 "" H 4650 3400 50  0001 C CNN
@@ -171,10 +171,10 @@ Wire Wire Line
 	3400 3200 3400 4050
 Connection ~ 3400 4050
 $Comp
-L Kube_library:C C?
+L Kube_library:C C16
 U 1 1 608D6035
 P 5750 4900
-F 0 "C?" H 5750 5152 50  0000 C CNN
+F 0 "C16" H 5750 5152 50  0000 C CNN
 F 1 "10nF" H 5750 5061 50  0000 C CNN
 F 2 "" V 5900 4938 50  0001 C CNN
 F 3 "~" H 5750 4900 50  0001 C CNN

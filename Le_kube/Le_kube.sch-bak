@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 4
+Sheet 1 5
 Title ""
 Date ""
 Rev ""
@@ -72,7 +72,7 @@ NoConn ~ 4350 4750
 $Sheet
 S 8100 2850 950  300 
 U 606BA942
-F0 "Sheet606BA941" 50
+F0 "Thermometre" 50
 F1 "LM75A_Temp_Sensor.sch" 50
 F2 "SDA" I L 8100 2950 50 
 F3 "SCL" I L 8100 3050 50 
@@ -80,7 +80,7 @@ $EndSheet
 $Sheet
 S 8100 3550 1000 600 
 U 60669017
-F0 "Sheet60669016" 50
+F0 "Ecran" 50
 F1 "ssd1306_128_64.sch" 50
 F2 "CS" I L 8100 4050 50 
 F3 "DC" I L 8100 3950 50 
@@ -146,8 +146,8 @@ $Comp
 L MCU_Microchip_ATmega:ATmega328PB-AU U?
 U 1 1 6081701B
 P 3000 2850
-F 0 "U?" H 3000 1261 50  0000 C CNN
-F 1 "ATmega328PB-AU" H 3000 1170 50  0000 C CNN
+F 0 "U?" H 2950 2750 50  0000 C CNN
+F 1 "ATmega328PB-AU" H 2950 3000 50  0000 C CNN
 F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 3000 2850 50  0001 C CIN
 F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40001906C.pdf" H 3000 2850 50  0001 C CNN
 	1    3000 2850
@@ -309,18 +309,6 @@ Wire Wire Line
 	5850 3650 8100 3650
 Wire Wire Line
 	5850 1650 5850 3650
-Wire Wire Line
-	3600 1950 5700 1950
-Wire Wire Line
-	5700 1950 5700 3750
-Wire Wire Line
-	5700 3750 8100 3750
-Wire Wire Line
-	3600 2150 5550 2150
-Wire Wire Line
-	5550 2150 5550 3850
-Wire Wire Line
-	5550 3850 8100 3850
 $Comp
 L power:+3.3V #PWR?
 U 1 1 60754CA5
@@ -401,9 +389,214 @@ Wire Wire Line
 	4150 1250 4400 1250
 Connection ~ 4400 1250
 $Sheet
-S 9050 2200 850  400 
+S 4650 2250 550  200 
 U 608A4ECC
-F0 "Sheet608A4ECB" 50
+F0 "Capteur_humidite" 50
 F1 "Capasitive_sensor.sch" 50
+F2 "AOUT" I L 4650 2350 50 
+$EndSheet
+Wire Wire Line
+	3900 2350 3900 2750
+Wire Wire Line
+	3900 2750 3600 2750
+Wire Wire Line
+	3900 2350 4650 2350
+Wire Wire Line
+	6700 3750 6700 5900
+Wire Wire Line
+	6700 5900 2400 5900
+Wire Wire Line
+	2400 5900 2400 3650
+Wire Wire Line
+	6700 3750 8100 3750
+Wire Wire Line
+	8100 3850 5000 3850
+Wire Wire Line
+	5000 3850 5000 2650
+Wire Wire Line
+	5000 2650 3600 2650
+$Comp
+L Kube_library:LD1117 VR
+U 1 1 60902603
+P 1400 1000
+F 0 "VR" H 1400 1350 50  0000 C CNN
+F 1 "LD1117" H 1400 1000 50  0000 C CNN
+F 2 "" H 1300 1050 50  0001 C CNN
+F 3 "" H 1300 1050 50  0001 C CNN
+	1    1400 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Kube_library:C C
+U 1 1 609039B3
+P 1000 1350
+F 0 "C" V 1046 1235 50  0000 R CNN
+F 1 "100nF" V 955 1235 50  0000 R CNN
+F 2 "" V 1150 1388 50  0001 C CNN
+F 3 "~" H 1000 1350 50  0001 C CNN
+	1    1000 1350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Kube_library:C C
+U 1 1 60904FF9
+P 1800 1350
+F 0 "C" V 1754 1465 50  0000 L CNN
+F 1 "10µF" V 1845 1465 50  0000 L CNN
+F 2 "" V 1950 1388 50  0001 C CNN
+F 3 "~" H 1800 1350 50  0001 C CNN
+	1    1800 1350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1000 1000 1000 1200
+Wire Wire Line
+	1000 1500 1400 1500
+Wire Wire Line
+	1800 1200 1800 1000
+Wire Wire Line
+	1400 1300 1400 1500
+Connection ~ 1400 1500
+Wire Wire Line
+	1400 1500 1800 1500
+Wire Wire Line
+	1400 1500 1400 1750
+$Comp
+L power:GND #PWR?
+U 1 1 6090CCB7
+P 1400 1750
+F 0 "#PWR?" H 1400 1500 50  0001 C CNN
+F 1 "GND" H 1405 1577 50  0000 C CNN
+F 2 "" H 1400 1750 50  0001 C CNN
+F 3 "" H 1400 1750 50  0001 C CNN
+	1    1400 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1800 1000 3000 1000
+Wire Wire Line
+	3000 1000 3000 1350
+Wire Wire Line
+	1000 1000 800  1000
+$Comp
+L Connector:USB_A J?
+U 1 1 60929EFF
+P 850 3400
+F 0 "J?" H 907 3867 50  0000 C CNN
+F 1 "USB_A" H 907 3776 50  0000 C CNN
+F 2 "" H 1000 3350 50  0001 C CNN
+F 3 " ~" H 1000 3350 50  0001 C CNN
+	1    850  3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 609196BA
+P 700 1000
+F 0 "#PWR?" H 700 850 50  0001 C CNN
+F 1 "+5V" V 850 950 50  0000 L CNN
+F 2 "" H 700 1000 50  0001 C CNN
+F 3 "" H 700 1000 50  0001 C CNN
+	1    700  1000
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	800  1000 800  2250
+Connection ~ 800  1000
+Wire Wire Line
+	800  1000 700  1000
+$Comp
+L Transistor_FET:IRLB8721PBF Q?
+U 1 1 60931B90
+P 900 2450
+F 0 "Q?" H 1105 2496 50  0000 L CNN
+F 1 "IRLB8721PBF" H 1105 2405 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 1150 2375 50  0001 L CIN
+F 3 "http://www.infineon.com/dgdl/irlb8721pbf.pdf?fileId=5546d462533600a40153566056732591" H 900 2450 50  0001 L CNN
+	1    900  2450
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	800  2650 1400 2650
+Wire Wire Line
+	1400 2650 1400 3200
+Wire Wire Line
+	1400 3200 1150 3200
+Wire Wire Line
+	3600 3550 3700 3550
+Wire Wire Line
+	3700 3550 3700 5000
+Wire Wire Line
+	3700 5000 1800 5000
+Wire Wire Line
+	1800 2450 1100 2450
+$Comp
+L power:GND #PWR?
+U 1 1 6093FE4F
+P 850 4200
+F 0 "#PWR?" H 850 3950 50  0001 C CNN
+F 1 "GND" H 855 4027 50  0000 C CNN
+F 2 "" H 850 4200 50  0001 C CNN
+F 3 "" H 850 4200 50  0001 C CNN
+	1    850  4200
+	1    0    0    -1  
+$EndComp
+NoConn ~ 1150 3400
+NoConn ~ 1150 3500
+NoConn ~ 750  3800
+$Comp
+L power:GND #PWR?
+U 1 1 60945E81
+P 1800 5400
+F 0 "#PWR?" H 1800 5150 50  0001 C CNN
+F 1 "GND" H 1805 5227 50  0000 C CNN
+F 2 "" H 1800 5400 50  0001 C CNN
+F 3 "" H 1800 5400 50  0001 C CNN
+	1    1800 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Kube_library:R R
+U 1 1 6095BC8F
+P 1800 5200
+F 0 "R" H 1800 5425 50  0000 C CNN
+F 1 "10K" H 1800 5334 50  0000 C CNN
+F 2 "" H 1800 5200 50  0001 C CNN
+F 3 "" H 1800 5200 50  0001 C CNN
+	1    1800 5200
+	0    -1   -1   0   
+$EndComp
+Connection ~ 1800 5000
+Wire Wire Line
+	1800 2450 1800 5000
+Wire Wire Line
+	850  3800 850  4200
+Entry Bus Bus
+	8100 7400 8200 7500
+Entry Bus Bus
+	8100 7400 8200 7500
+Entry Bus Bus
+	8100 7400 8200 7500
+$Comp
+L power:GND #PWR?
+U 1 1 60972291
+P 3000 4550
+F 0 "#PWR?" H 3000 4300 50  0001 C CNN
+F 1 "GND" H 3005 4377 50  0000 C CNN
+F 2 "" H 3000 4550 50  0001 C CNN
+F 3 "" H 3000 4550 50  0001 C CNN
+	1    3000 4550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3000 4550 3000 4350
+NoConn ~ 2400 3350
+NoConn ~ 2400 3450
+NoConn ~ 2400 3550
+$Sheet
+S 8700 1850 500  550 
+U 60991DCA
+F0 "connecteur_isp" 50
+F1 "Connector_ISP.sch" 50
 $EndSheet
 $EndSCHEMATC

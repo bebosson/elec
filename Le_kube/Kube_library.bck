@@ -21,6 +21,12 @@ K connector
 F ~
 $ENDCMP
 #
+$CMP Crystal
+D Two pin crystal
+K quartz ceramic resonator oscillator
+F ~
+$ENDCMP
+#
 $CMP D
 D Diode
 K diode

@@ -200,21 +200,6 @@ Wire Wire Line
 Wire Wire Line
 	4050 3650 4050 2600
 Wire Wire Line
-	5600 2700 5300 2700
-$Comp
-L Kube_library:R R11
-U 1 1 60712FDF
-P 5100 2700
-F 0 "R11" H 5054 2788 50  0000 L CNN
-F 1 "0" H 5000 2850 50  0000 L CNN
-F 2 "" H 5100 2700 50  0001 C CNN
-F 3 "" H 5100 2700 50  0001 C CNN
-	1    5100 2700
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	4900 2700 4700 2700
-Wire Wire Line
 	4700 2700 4700 2500
 Connection ~ 4700 2500
 Wire Wire Line
@@ -426,4 +411,6 @@ F 3 "" H 2200 1850 50  0001 C CNN
 	1    2200 1850
 	0    1    1    0   
 $EndComp
+Wire Wire Line
+	4700 2700 5600 2700
 $EndSCHEMATC

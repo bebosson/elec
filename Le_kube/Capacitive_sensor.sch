@@ -62,9 +62,11 @@ F 3 "" H 5900 2350 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Kube_library:C C17
+L Le_kube-rescue:C-Kube_library C17
 U 1 1 608B4227
 P 5550 2350
+AR Path="/608B4227" Ref="C17"  Part="1" 
+AR Path="/608A4ECC/608B4227" Ref="C17"  Part="1" 
 F 0 "C17" V 5504 2465 50  0000 L CNN
 F 1 "1µF" V 5595 2465 50  0000 L CNN
 F 2 "" V 5700 2388 50  0001 C CNN
@@ -96,9 +98,11 @@ F 3 "" H 3400 4100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:C C15
+L Le_kube-rescue:C-Kube_library C15
 U 1 1 608CBCCA
 P 3850 4050
+AR Path="/608CBCCA" Ref="C15"  Part="1" 
+AR Path="/608A4ECC/608CBCCA" Ref="C15"  Part="1" 
 F 0 "C15" H 3850 4302 50  0000 C CNN
 F 1 "470pF" H 3850 4211 50  0000 C CNN
 F 2 "" V 4000 4088 50  0001 C CNN
@@ -107,9 +111,11 @@ F 3 "~" H 3850 4050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:C C14
+L Le_kube-rescue:C-Kube_library C14
 U 1 1 608CE6B8
 P 3850 3200
+AR Path="/608CE6B8" Ref="C14"  Part="1" 
+AR Path="/608A4ECC/608CE6B8" Ref="C14"  Part="1" 
 F 0 "C14" H 3850 3452 50  0000 C CNN
 F 1 "100nF" H 3850 3361 50  0000 C CNN
 F 2 "" V 4000 3238 50  0001 C CNN
@@ -171,9 +177,11 @@ Wire Wire Line
 	3400 3200 3400 4050
 Connection ~ 3400 4050
 $Comp
-L Kube_library:C C16
+L Le_kube-rescue:C-Kube_library C16
 U 1 1 608D6035
 P 5750 4900
+AR Path="/608D6035" Ref="C16"  Part="1" 
+AR Path="/608A4ECC/608D6035" Ref="C16"  Part="1" 
 F 0 "C16" H 5750 5152 50  0000 C CNN
 F 1 "10nF" H 5750 5061 50  0000 C CNN
 F 2 "" V 5900 4938 50  0001 C CNN
@@ -264,11 +272,11 @@ Wire Wire Line
 	6900 2150 5900 2150
 Connection ~ 5900 2150
 $Comp
-L Kube_library:PROBE C?
+L Kube_library:PROBE C19
 U 1 1 60DFB560
 P 7050 2150
-F 0 "C?" H 7050 2465 50  0000 C CNN
-F 1 "PROBE" H 7050 2374 50  0000 C CNN
+F 0 "C19" H 7050 2465 50  0001 C CNN
+F 1 "PROBE" H 7050 2374 50  0001 C CNN
 F 2 "" V 7200 2188 50  0001 C CNN
 F 3 "~" H 7050 2150 50  0001 C CNN
 	1    7050 2150

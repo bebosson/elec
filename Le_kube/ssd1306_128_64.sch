@@ -88,9 +88,11 @@ Connection ~ 8250 2400
 Wire Wire Line
 	8250 2400 8250 2500
 $Comp
-L Kube_library:C C8
+L Le_kube-rescue:C-Kube_library C8
 U 1 1 606B34DF
 P 6150 3550
+AR Path="/606B34DF" Ref="C8"  Part="1" 
+AR Path="/60669017/606B34DF" Ref="C8"  Part="1" 
 F 0 "C8" H 6150 3802 50  0000 C CNN
 F 1 "1µF" H 6150 3711 50  0000 C CNN
 F 2 "" V 6300 3588 50  0001 C CNN
@@ -103,9 +105,11 @@ Wire Wire Line
 Wire Wire Line
 	6300 3550 6300 3200
 $Comp
-L Kube_library:C C9
+L Le_kube-rescue:C-Kube_library C9
 U 1 1 606BB097
 P 6650 3550
+AR Path="/606BB097" Ref="C9"  Part="1" 
+AR Path="/60669017/606BB097" Ref="C9"  Part="1" 
 F 0 "C9" H 6650 3802 50  0000 C CNN
 F 1 "1µF" H 6650 3711 50  0000 C CNN
 F 2 "" V 6800 3588 50  0001 C CNN
@@ -118,9 +122,11 @@ Wire Wire Line
 Wire Wire Line
 	6800 3550 6800 3200
 $Comp
-L Kube_library:C C10
+L Le_kube-rescue:C-Kube_library C10
 U 1 1 606BD997
 P 7050 3450
+AR Path="/606BD997" Ref="C10"  Part="1" 
+AR Path="/60669017/606BD997" Ref="C10"  Part="1" 
 F 0 "C10" V 7150 3600 50  0000 R CNN
 F 1 "4.7µF" V 6950 3650 50  0000 R CNN
 F 2 "" V 7200 3488 50  0001 C CNN
@@ -129,9 +135,11 @@ F 3 "~" H 7050 3450 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Kube_library:C C11
+L Le_kube-rescue:C-Kube_library C11
 U 1 1 606C0222
 P 7250 3450
+AR Path="/606C0222" Ref="C11"  Part="1" 
+AR Path="/60669017/606C0222" Ref="C11"  Part="1" 
 F 0 "C11" V 7350 3600 50  0000 R CNN
 F 1 "2.2µF" V 7150 3400 50  0000 R CNN
 F 2 "" V 7400 3488 50  0001 C CNN
@@ -239,9 +247,11 @@ F 3 "" H 8500 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Kube_library:C C12
+L Le_kube-rescue:C-Kube_library C12
 U 1 1 6076456A
 P 8900 2800
+AR Path="/6076456A" Ref="C12"  Part="1" 
+AR Path="/60669017/6076456A" Ref="C12"  Part="1" 
 F 0 "C12" V 8854 2915 50  0000 L CNN
 F 1 "1µF" V 8945 2915 50  0000 L CNN
 F 2 "" V 9050 2838 50  0001 C CNN
@@ -254,9 +264,11 @@ Wire Wire Line
 Wire Wire Line
 	8500 2650 8900 2650
 $Comp
-L Kube_library:C C13
+L Le_kube-rescue:C-Kube_library C13
 U 1 1 6076CFA7
 P 9300 2800
+AR Path="/6076CFA7" Ref="C13"  Part="1" 
+AR Path="/60669017/6076CFA7" Ref="C13"  Part="1" 
 F 0 "C13" V 9254 2915 50  0000 L CNN
 F 1 "1µF" V 9345 2915 50  0000 L CNN
 F 2 "" V 9450 2838 50  0001 C CNN

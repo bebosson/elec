@@ -354,7 +354,7 @@ Connection ~ 2300 1400
 Wire Wire Line
 	2700 1100 2700 900 
 $Comp
-L Kube_library:C C2
+L Le_kube-rescue:C-Kube_library C2
 U 1 1 60904FF9
 P 2700 1250
 F 0 "C2" V 2654 1365 50  0000 L CNN
@@ -866,7 +866,7 @@ Wire Wire Line
 Wire Wire Line
 	1900 1400 2300 1400
 $Comp
-L Kube_library:C C1
+L Le_kube-rescue:C-Kube_library C1
 U 1 1 609039B3
 P 1900 1250
 F 0 "C1" V 1946 1135 50  0000 R CNN
@@ -935,14 +935,31 @@ F 3 "~" H 1800 900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR0114
 U 1 1 60DDA66B
-P 1050 900
-F 0 "#PWR?" H 1050 750 50  0001 C CNN
-F 1 "+5V" H 1065 1073 50  0000 C CNN
-F 2 "" H 1050 900 50  0001 C CNN
-F 3 "" H 1050 900 50  0001 C CNN
-	1    1050 900 
-	0    -1   -1   0   
+P 1200 1350
+F 0 "#PWR0114" H 1200 1200 50  0001 C CNN
+F 1 "+5V" H 1215 1523 50  0000 C CNN
+F 2 "" H 1200 1350 50  0001 C CNN
+F 3 "" H 1200 1350 50  0001 C CNN
+	1    1200 1350
+	-1   0    0    1   
 $EndComp
+$Comp
+L Connector:Jack-DC J?
+U 1 1 607A5C33
+P 750 1000
+AR Path="/608A4ECC/607A5C33" Ref="J?"  Part="1" 
+AR Path="/607A5C33" Ref="J3"  Part="1" 
+F 0 "J3" H 521 958 50  0000 R CNN
+F 1 "Jack-DC" H 521 1049 50  0000 R CNN
+F 2 "" H 800 960 50  0001 C CNN
+F 3 "~" H 800 960 50  0001 C CNN
+	1    750  1000
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	1050 1100 1200 1100
+Wire Wire Line
+	1200 1100 1200 1350
 $EndSCHEMATC

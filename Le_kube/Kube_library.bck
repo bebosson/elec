@@ -69,6 +69,11 @@ K single timer 555
 F http://www.ti.com/lit/ds/symlink/ne555.pdf
 $ENDCMP
 #
+$CMP PROBE
+K cap capacitor
+F ~
+$ENDCMP
+#
 $CMP SA555D
 D Precision Timers, 555 compatible, SOIC-8
 K single timer 555

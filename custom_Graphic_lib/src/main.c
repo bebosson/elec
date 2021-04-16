@@ -219,10 +219,12 @@ void    display_info()
 
 
 int       main() {
+    // DDRD |= (1 << PD2);
     t_specie *specie;
     chosen_specie = 0;
 //    EIFR |= (1 << INTF1); //Turn on interrupt INT 1
  //        // Turns on INT1
+    // PORTD |= (1 << PD2);
     EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
     EIMSK |= (1 << INT1);
@@ -238,6 +240,7 @@ int       main() {
             display_menu();
         else
             display_info();
+        
         ft_delay(F_CPU / 1000);
     }
 

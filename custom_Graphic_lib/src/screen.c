@@ -1,5 +1,6 @@
 #include "avr/io.h"
 
+
 char buffer_text[8][21];
 
 //576 octets (256 * 2 + 64)
@@ -180,24 +181,24 @@ void    print_screen() {
 void SPI_MasterTransmit(char cData)
 {
     /* Start transmission */
-    SPDR = cData;
+    SPDR1 = cData;
     /* Wait for transmission complete */
-    while(!(SPSR & (1<<SPIF)))
+    while(!(SPSR1 & (1<<SPIF)))
     ;
 }
 
 void    display_init() {
 
     // set pin CS DC REST as output
-    DDRD |= (1 << PD6);
-    DDRD |= (1 << PD7);
-    DDRB |= (1 << PB0);
+    DDRD |= (1 << PD6); //DC
+    DDRD |= (1 << PD7); //CS
+    DDRB |= (1 << PB0); //RST
     // SPI_MasterInit
     PORTB |= (1 << PB2);
-    SPCR = (1<<SPE)|(1<<MSTR);
+    SPCR1 = (1<<SPE)|(1<<MSTR);
     DDRD |= (1 << PD7);         // pinMode(SS, OUTPUT);
-    DDRB |= (1 << PB5);         // pinMode(SCK, OUTPUT);
-    DDRB |= (1 << PB3);         // pinMode(MOSI, OUTPUT);
+    DDRC |= (1 << PC1);         // pinMode(SCK, OUTPUT);
+    DDRE |= (1 << PE3);         // pinMode(MOSI, OUTPUT);
 
 
     PORTB |= (1 << PB0); // pin reset sd1306

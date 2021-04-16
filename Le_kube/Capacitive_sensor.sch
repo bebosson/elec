@@ -49,7 +49,7 @@ F 3 "~" H 7200 2550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7650 2550 7350 2550
+	7650 2550 7450 2550
 $Comp
 L Kube_library:R R13
 U 1 1 608B3772
@@ -253,4 +253,25 @@ AOUT
 Wire Wire Line
 	5550 2550 4850 2550
 Connection ~ 5550 2550
+Wire Wire Line
+	7450 2550 7450 2150
+Connection ~ 7450 2550
+Wire Wire Line
+	7450 2550 7350 2550
+Wire Wire Line
+	7200 2150 7450 2150
+Wire Wire Line
+	6900 2150 5900 2150
+Connection ~ 5900 2150
+$Comp
+L Kube_library:PROBE C?
+U 1 1 60DFB560
+P 7050 2150
+F 0 "C?" H 7050 2465 50  0000 C CNN
+F 1 "PROBE" H 7050 2374 50  0000 C CNN
+F 2 "" V 7200 2188 50  0001 C CNN
+F 3 "~" H 7050 2150 50  0001 C CNN
+	1    7050 2150
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

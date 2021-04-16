@@ -10,11 +10,6 @@ $CMP AP2112K-3.3
 D The AP2112 is CMOS process low dropout linearregulator with enable function, the regulator deliversa guaranteed 600mA (min.) continuous load current.
 $ENDCMP
 #
-$CMP C
-K cap capacitor
-F ~
-$ENDCMP
-#
 $CMP Conn_01x06_Male
 D Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
 K connector
@@ -67,6 +62,11 @@ $CMP NA555D
 D Precision Timers, 555 compatible, SOIC-8
 K single timer 555
 F http://www.ti.com/lit/ds/symlink/ne555.pdf
+$ENDCMP
+#
+$CMP PROBE
+K cap capacitor
+F ~
 $ENDCMP
 #
 $CMP SA555D

@@ -4,7 +4,7 @@ CFLAGS= -std=c99 -Wall -ffunction-sections
 DUDE = avrdude
 F_CPU=8000000
 PORT=/dev/cu.SLAB_USBtoUART
-MCU = atmega328p
+MCU = atmega328pb 
 
 SRC_DIR := src
 OBJ_DIR := obj

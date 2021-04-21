@@ -21,7 +21,7 @@ typedef struct s_specie{
     uint16_t mois_min;
 }           t_specie;
 
-void    putnbr(char nb, char x, char y);
+void    putnbr(uint16_t nb, char x, char y);
 void    put_str(char *str, char x, char y);
 void	SPI_MasterTransmit(char cData);
 void    display_init();

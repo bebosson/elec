@@ -1,10 +1,10 @@
 #include "main.h"
 
 
-extern char font[96][6];
-char    chosen_specie; //flag of chosen species
-char    transition;
-volatile char    choosing;
+extern uint8_t font[96][6];
+uint8_t    chosen_specie; //flag of chosen species
+uint8_t    transition;
+volatile uint8_t    choosing;
 
 
 uint8_t   clean_transition()
@@ -26,7 +26,7 @@ void    transition_menu(uint8_t *x, uint8_t *y)
 
 void   navigation_button(uint8_t *x, uint8_t *y)
 {
-    
+
     if (PIND & (1 << PD4)) //boutton du bas
     {
         put_str(" ",*x, *y);
@@ -36,9 +36,9 @@ void   navigation_button(uint8_t *x, uint8_t *y)
             transition_menu(x, y);
             *y = 3;
         }
-//        PIND ^= ~(1 << PD4); rebond ? 
+//        PIND ^= ~(1 << PD4); rebond ?
     }
-    if (PIND & (1 << PD5)) // boutton du bas 
+    if (PIND & (1 << PD5)) // boutton du bas
     {
         put_str(" ",*x, *y);
         (*y)--;
@@ -47,7 +47,7 @@ void   navigation_button(uint8_t *x, uint8_t *y)
             transition_menu(x, y);
             *y = 7;
         }
-//        PIND ^= ~(1 << PD5); rebond ? 
+//        PIND ^= ~(1 << PD5); rebond ?
     }
 }
 
@@ -70,7 +70,7 @@ void    render_champ()
     // eeprom_read_page(36, 18, specie);
     // put_str(specie,0,5);
     // put_str("CHAMP 4   ",0,6);
-    // put_str("CHAMP 5   ",0,7); 
+    // put_str("CHAMP 5   ",0,7);
 /*  put_str("CHAMP 6   ",10,3);
     put_str("CHAMP 7   ",10,4);
     put_str("CHAMP 8   ",10,5);
@@ -107,14 +107,9 @@ uint16_t  getTemperature() {
     while (i < TWI_BUFFER_LENGTH) {
         rx_data[i++] = 0;
     }
-
     twi_writeTo(tx_address, 0x00, 1, true, true);
-
     uint8_t read = twi_readFrom(tx_address, &(rx_data[0]), 2, true);
-
     twi_writeTo(tx_address, 0, 0, true, true);
-    
-
     return *(int16_t *)(rx_data);
 }
 
@@ -135,60 +130,37 @@ void    print_temp(uint16_t val) {
         put_str(".0", (temperature < 10) ? 14 : 15,4);
     }
     put_str("oC", (temperature < 10) ? 16 : 17, 4);
-    //test value temp fº specie arrow 
+    //test value temp fº specie arrow
 }
 
-unsigned int read_lux(){
-    unsigned int nb;
-    ADMUX &= ~(1 << MUX0) & ~(1 << MUX1) & ~(1 << MUX2) & ~(1 << MUX3);//set pin A0
-    ADCSRA |= (1 << ADSC); // start calculations
-	while(ADCSRA & (1 << ADSC)); // wait calculations is done
-	nb = (unsigned int)ADCL;
-    if (ADCH & 1) {
-		nb |= (1 << 8);
-	}
-	if (ADCH & 2) {
-		nb |= (1 << 9);
-	}
-    return (nb);
-}
-
-unsigned int read_moisture(){
-    unsigned int nb;
+uint16_t read_lux(){
+    uint16_t lux = 0;
+    ADMUX &= ~(1 << MUX3);//set pin A3
+    ADMUX &= ~(1 << MUX2);
+    ADMUX |= (1 << MUX1);
     ADMUX |= (1 << MUX0);
-    ADMUX &= ~(1 << MUX1) & ~(1 << MUX2) & ~(1 << MUX3);
-//    ADMUX &= ~(1 << MUX0);//set pin A1
     ADCSRA |= (1 << ADSC); // start calculations
-	while(ADCSRA & (1 << ADSC)); // wait calculations is done
-	nb = (unsigned int)ADCL;
-    if (ADCH & 1) {
-		nb |= (1 << 8);
-	}
-	if (ADCH & 2) {
-		nb |= (1 << 9);
-	}
-    return (nb);
+        while((ADCSRA & (1 << ADSC))); // wait calculations is done
+        lux = ADCL | (uint16_t)(ADCH & 0b11) << 8;
+    return (lux);
 }
 
-unsigned int read_temperature(){
-    unsigned int nb;
-    ADMUX |= (1 << MUX2) | (1 << MUX0);
-    ADMUX &= ~(1 << MUX1)  & ~(1 << MUX3);
-//    ADMUX &= ~(1 << MUX0);//set pin A1
+uint16_t read_moisture(){
+    uint16_t mois = 0;
+    ADMUX |= (1 << MUX1); // set ADC2
+    ADMUX &= ~(1 << MUX0);
+    ADMUX &= ~(1 << MUX2);
+    ADMUX &= ~(1 << MUX3);
     ADCSRA |= (1 << ADSC); // start calculations
-	while(ADCSRA & (1 << ADSC)); // wait calculations is done
-	nb = (unsigned int)ADCL;
-    if (ADCH & 1) {
-		nb |= (1 << 8);
-	}
-	if (ADCH & 2) {
-		nb |= (1 << 9);
-	}
-    return (nb);
+    while((ADCSRA & (1 << ADSC))); // wait calculations is done
+    mois = ADCL | (uint16_t)(ADCH & 0b11) << 8;
+    // putnbr(adch, 0, 4);
+    // print_screen();
+    return (mois);
 }
 
 ISR(INT1_vect)
-{   
+{
     clean_transition();
     if (choosing) {
         choosing = 0;
@@ -199,9 +171,9 @@ ISR(INT1_vect)
 
 void    display_info()
 {
-    unsigned int lux;
-    unsigned int mois;
-    char        memory_species = 18 * (chosen_specie - 1);
+    uint16_t lux;
+    uint16_t mois;
+    uint8_t        memory_species = 18 * (chosen_specie - 1);
     uint8_t spec[8];
 
     lux = read_lux();
@@ -209,40 +181,32 @@ void    display_info()
     putnbr(lux, 13, 0);
     mois = read_moisture();
     put_str("HUMIDITE:           ", 0, 2);
-    putnbr(mois, 13, 2);
+    putnbr(analogRead(A2), 13, 2);
     print_temp(getTemperature());
     put_str("ESPECE:   ", 0, 6);
     eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
-    put_str(spec,11,6);
+    put_str(spec, 11, 6);
     print_screen();
 }
 
 
 int       main() {
-    // DDRD |= (1 << PD2);
-    t_specie *specie;
-    chosen_specie = 0;
-//    EIFR |= (1 << INTF1); //Turn on interrupt INT 1
- //        // Turns on INT1
-    // PORTD |= (1 << PD2);
     EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
     EIMSK |= (1 << INT1);
     ADCSRA |= (1 << ADEN); // enable ADC
-    ADMUX |= (1 << REFS0); // VCC -> voltage reference
-    display_init(); //pin connected to screen 
+    ADMUX |= (1 << REFS0); // AVCC with external capacitor at AREF pin
+    display_init(); //pin connected to screen
     choosing = 1;
     // eeprom_write_specie();
-    uart_tx('A');
-    
+
     while(1) {
         if (choosing == 1)
             display_menu();
         else
             display_info();
-        
-        ft_delay(F_CPU / 1000);
-    }
 
+        ft_delay(F_CPU / 500);
+    }
     return 0;
 }

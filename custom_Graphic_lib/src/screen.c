@@ -4,7 +4,7 @@
 char buffer_text[8][21];
 
 //576 octets (256 * 2 + 64)
-const char font[96][6] = {
+const char font[50][6] = {
     {0,0,0,0,0,0},
     {124,10,9,10,124},      // A
     {127,73,73,78,48,0},    // B
@@ -52,7 +52,8 @@ const char font[96][6] = {
     {0,0,126,0,0,0}, // |
     {0,0,96,48,0,0}, // ,
     {0,0,96,96,0,0}, // .
-    {0,0,2,5,2,0} // °
+    {0,0,2,5,2,0}, // °
+    {35,19,8,4,50,49} // %
 };
 
 uint8_t init_seq[] = {
@@ -113,6 +114,8 @@ void    put_str(char *str, char x, char y) {
             *text = 46;
         else if (*str == 'o')
             *text = 47;
+        else if (*str == '%')
+            *text = 48;
         str++;
         text++;
     }
@@ -120,6 +123,17 @@ void    put_str(char *str, char x, char y) {
 
 void putnbr(unsigned int nb, char x, char y) {
     char *text = &buffer_text[y][x];
+    if (nb >= 1000)
+    {
+        *text++ = nb / 1000 + 27;
+        if (nb % 1000 < 100) {
+            *text++ = 27;
+        }
+        if (nb % 1000 < 10) {
+            *text++ = 27;
+        }
+        nb %= 1000;
+    }
     if (nb >= 100)
     {
         *text++ = nb / 100 + 27;

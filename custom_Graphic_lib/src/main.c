@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 extern uint8_t font[96][6];
 uint8_t    chosen_specie; //flag of chosen species
 uint8_t    transition;
@@ -156,7 +155,10 @@ uint16_t read_moisture(){
     mois = ADCL | (uint16_t)(ADCH & 0b11) << 8;
     // putnbr(adch, 0, 4);
     // print_screen();
-    return (mois);
+    // return (mois);
+    // return ((100 - ((mois * 100 / 1023) / 100)));
+    //return (mois);
+    return ((1023 - mois) / 5);
 }
 
 ISR(INT1_vect)
@@ -180,8 +182,9 @@ void    display_info()
     put_str("LUMINOSITE:         ", 0, 0);
     putnbr(lux, 13, 0);
     mois = read_moisture();
-    put_str("HUMIDITE:           ", 0, 2);
-    putnbr(analogRead(A2), 13, 2);
+    put_str("HUMIDITE:         % ", 0, 2);
+    putnbr(mois, 13, 2);
+    // put_str("%"ß, 0, 2);
     print_temp(getTemperature());
     put_str("ESPECE:   ", 0, 6);
     eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
@@ -205,8 +208,7 @@ int       main() {
             display_menu();
         else
             display_info();
-
-        ft_delay(F_CPU / 500);
+        ft_delay(F_CPU / 1000);
     }
     return 0;
 }

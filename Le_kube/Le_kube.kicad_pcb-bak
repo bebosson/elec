@@ -1341,7 +1341,7 @@
   )
 
   (module "Le_kube:LDR(RES-TH_L5.1-W4.3-P3.40-D0.5)" (layer F.Cu) (tedit 0) (tstamp 607E01B4)
-    (at 146.05 87.63)
+    (at 50.658908 31.499414)
     (path /606F17C2)
     (fp_text reference LDR1 (at -0.127 -2.716) (layer F.SilkS)
       (effects (font (size 1.143 1.143) (thickness 0.152)) (justify left))

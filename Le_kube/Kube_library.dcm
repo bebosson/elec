@@ -87,12 +87,6 @@ K single timer 555
 F http://www.ti.com/lit/ds/symlink/ne555.pdf
 $ENDCMP
 #
-$CMP SW
-D Single Pole Single Throw (SPST) switch, separate symbol
-K switch lever
-F ~
-$ENDCMP
-#
 $CMP TLC555xD
 D Single LinCMOS Timer, 555 compatible, SOIC-8
 K single timer 555

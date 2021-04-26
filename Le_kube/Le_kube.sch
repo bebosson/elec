@@ -102,7 +102,7 @@ F 3 "~" H 10000 3675 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Le_kube-rescue:SW_Push-Switch SW5
+L Kube_library:SW SW5
 U 1 1 6073EFB3
 P 10550 3875
 F 0 "SW5" H 10550 4160 50  0000 C CNN
@@ -140,7 +140,7 @@ F 3 "~" H 8550 3575 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Le_kube-rescue:SW_Push-Switch SW4
+L Kube_library:SW SW4
 U 1 1 60738C1C
 P 9100 3775
 F 0 "SW4" H 9100 4060 50  0000 C CNN
@@ -167,17 +167,6 @@ Connection ~ 7050 3675
 Wire Wire Line
 	7050 3575 7050 3675
 $Comp
-L Device:R_Small R3
-U 1 1 60734D6E
-P 7050 3475
-F 0 "R3" H 7109 3521 50  0000 L CNN
-F 1 "10K" H 7109 3430 50  0000 L CNN
-F 2 "Le_kube:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 7050 3475 50  0001 C CNN
-F 3 "~" H 7050 3475 50  0001 C CNN
-	1    7050 3475
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+3.3V #PWR0107
 U 1 1 60733B39
 P 7800 3675
@@ -189,7 +178,7 @@ F 3 "" H 7800 3675 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Le_kube-rescue:SW_Push-Switch SW3
+L Kube_library:SW SW3
 U 1 1 607269BE
 P 7600 3675
 F 0 "SW3" H 7600 3960 50  0000 C CNN
@@ -451,7 +440,7 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40001906C.pdf" H 4100 2875 
 	1    0    0    -1  
 $EndComp
 $Comp
-L Le_kube-rescue:SW_Push-Switch SW2
+L Kube_library:SW SW2
 U 1 1 6075C822
 P 6700 2475
 F 0 "SW2" H 6700 2675 50  0000 C CNN
@@ -987,6 +976,17 @@ F 1 "Barrel_Jack_Switch" H 982 2026 50  0000 C CNN
 F 2 "Le_kube:PORT-JACK(DC-IN-TH_DC-003-2A-1.3)" H 975 1760 50  0001 C CNN
 F 3 "~" H 975 1760 50  0001 C CNN
 	1    925  1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Small R3
+U 1 1 60734D6E
+P 7050 3475
+F 0 "R3" H 7109 3521 50  0000 L CNN
+F 1 "10K" H 7109 3430 50  0000 L CNN
+F 2 "Le_kube:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" H 7050 3475 50  0001 C CNN
+F 3 "~" H 7050 3475 50  0001 C CNN
+	1    7050 3475
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

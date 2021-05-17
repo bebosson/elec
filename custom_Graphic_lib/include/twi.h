@@ -225,7 +225,7 @@
      *
      * TWSR, masked by TW_STATUS_MASK
      */
-    #define TW_STATUS		(TWSR & TW_STATUS_MASK)
+    #define TW_STATUS		(TWSR0 & TW_STATUS_MASK)
     /*@}*/
 
     /**

@@ -1,4 +1,6 @@
 #include "main.h"
+#include <stdio.h>
+#include <string.h>
 
 extern uint8_t font[96][6];
 uint8_t    chosen_specie; //flag of chosen species
@@ -107,7 +109,7 @@ uint16_t  getTemperature() {
         rx_data[i++] = 0;
     }
     twi_writeTo(tx_address, 0x00, 1, true, true);
-    uint8_t read = twi_readFrom(tx_address, &(rx_data[0]), 2, true);
+    twi_readFrom(tx_address, &(rx_data[0]), 2, true);
     twi_writeTo(tx_address, 0, 0, true, true);
     return *(int16_t *)(rx_data);
 }
@@ -182,9 +184,8 @@ void    display_info()
     put_str("LUMINOSITE:         ", 0, 0);
     putnbr(lux, 13, 0);
     mois = read_moisture();
-    put_str("HUMIDITE:         % ", 0, 2);
+    put_str("HUMIDITE:       % ", 0, 2);
     putnbr(mois, 13, 2);
-    // put_str("%"ß, 0, 2);
     print_temp(getTemperature());
     put_str("ESPECE:   ", 0, 6);
     eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
@@ -194,6 +195,7 @@ void    display_info()
 
 
 int       main() {
+    bool    is_connected = false;
     EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
     EIMSK |= (1 << INT1);
@@ -202,6 +204,106 @@ int       main() {
     display_init(); //pin connected to screen
     choosing = 1;
     // eeprom_write_specie();
+    uart_init1();
+    //ft_delay(F_CPU / 500);
+    //uart_strx1("AT+CWMODE_DEF=3\r\n"); //set AP and station mode
+    //ft_delay(F_CPU / 500);
+    // // uart_strx("AT+CWLAP\r\n"); //list available APs
+    // uart_strx1("AT+GMR\r\n");
+    uart_strx1("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
+    // uart_strx1("AT+CWJAP_CUR=\"Pixel_6023\",\"92itn65rmnq5ij\"\r\n");
+    ft_delay(F_CPU / 7);
+    // uart_strx1("AT+CIPMUX=1\r\n");
+    ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSSLSIZE=4096\r\n");
+    ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSNTPCFG=1,8,\"cn.ntp.org.cn\",\"ntp.sjtu.edu.cn\",\"us.pool.ntp.org\"\r\n");
+    // uart_strx1("AT+CIPSNTPCFG=1,8\r\n");
+    ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSNTPCFG?\r\n");
+    ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSSLCCONF=2\r\n");
+    ft_delay(F_CPU / 50);
+    // TEST CONNECTION A UN ORDI SUR LE MEME RESEAU (nc -l 80)
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"172.20.10.7\",80\r\n");
+    // ft_delay(F_CPU / 10);
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",443\r\n");
+    // uart_strx1("AT+CIPSTART=\"SSL\",\"51.77.194.65\",443,1000\r\n");
+    // uart_strx1("AT+CIPSTART=\"SSL\",\"www.google.com\",443,1200\r\n");
+    uart_strx1("AT+CIPSTART=\"TCP\",\"www.google.com\",80\r\n");	
+    ft_delay(F_CPU / 50);
+    uart_strx1("AT+CIPSTATUS\r\n");
+    ft_delay(F_CPU / 50);
+    // char cmd[] = "GET / HTTP/1.0\r\nhost: 42chips.fr\r\n\r\n";
+    char cmd[] = "GET /images/branding/googlelogo/2x/googlelogo_color_120x44dp.png HTTP/1.0\r\nHost: www.google.com\r\nUser-Agent: ESP8266\r\nAccept: image\r\nConnection: keep-alive\r\n\r\n";
+    char tmp[3];
+    sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd));
+    uart_strx1(tmp);
+    ft_delay(F_CPU / 500);
+    // uart_strx1("GET http://httpbin.org/get HTTP/1.1");
+    // uart_strx1("GET https://le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app/test.json HTTPS/1.1");
+    
+    // uart_strx1("GET https://le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app:443/test.json HTTPS/1.1\r\n\r\n");
+    uart_strx1(cmd);
+    ft_delay(F_CPU / 20);
+    
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",443\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSEND=96\r\n");
+    // ft_delay(F_CPU / 500);
+    // uart_strx1("GET /test.json HTTPS/1.1\r\nHost: le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\r\n\r\n");
+
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",443\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSTATUS\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSEND=96\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("GET /test.json HTTP/1.1\r\nHost:le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\r\n\r\n");
+
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"httpbin.org\",443\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSEND=41\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("GET /get HTTPS/1.1\r\nHost:httpbin.org\r\n\r\n");
+
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"httpbin.org\",443\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSEND=39\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("GET /get HTTPS/1.1\r\nHost:httpbin.org\r\n\r\n");
+
+
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",443\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSEND=95\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("GET /test.json HTTP/1.1\r\nHost: le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\r\n\r\n");
+
+
+
+
+    // uart_strx1("GET /receiver.php?apples=56&oranges=23 HTTP/1.1\r\nHost: shotlu.usrs0.com\r\n\r\n");
+
+    // uart_strx1("AT+CIPDOMAIN=\"www.google.com\"\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPDOMAIN=\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\"\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",80\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+HTTPCLIENT=2,0,\"http://httpbin.org/get\",\"httpbin.org\",\"/get\",1\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"https://le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",5000\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("AT+CIPSTART=\"TCP\",\"https://le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app\",9099\r\n");
+    // ft_delay(F_CPU / 50);
+    //uart_strx1("AT+HTTPCLIENT=2,0,\"le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app/test\",\"/get\",1\r\n");
+
+
+    // uart_strx1("AT+HTTPCPOST=\"https://le-kube-4269e-default-rtdb.europe-west1.firebasedatabase.app/moisture/value.json\",18\r\n");
+    // ft_delay(F_CPU / 50);
+    // uart_strx1("{ \"value\" : \"12\" }\r\n");
+    // ft_delay(F_CPU / 500);
 
     while(1) {
         if (choosing == 1)

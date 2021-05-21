@@ -16,7 +16,19 @@ const db = mysql.createPool({
 app.use(express.json())
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}))
-app.post("/", (req, res) => {
+
+app.get('/api/get' , (req, res) => {
+  const sqlSelect = 
+  "SELECT * FROM plant"
+  db.query(sqlSelect, (err, result) =>{
+    res.send(result);
+  });
+})
+
+
+
+
+app.post("/api/insert", (req, res) => {
   // const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const date = moment().format('YYYY-MM-D h:mm:ss')
   const temperature = req.body.temperature;

@@ -1,6 +1,6 @@
 
 import './App.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // import logo from './kisspng-leaf-logo-brand-plant-stem-folha-5acb0798d686f9.0092563815232551928787.jpg'
 import Axios from "axios";
 // console.log(logo);
@@ -8,12 +8,19 @@ import Axios from "axios";
 
 function App() {
   
-  const [humidite, setHumidite] = useState('')
-  const [temperature, setTemperature] = useState('')
-  const [luminosite, setLuminosite] = useState('')
+  const [humidite, setHumidite] = useState("")
+  const [temperature, setTemperature] = useState("")
+  const [luminosite, setLuminosite] = useState("")
+  const [plantLogList, setLogPlant] = useState([])
+
+  useEffect(() => {
+    Axios.get('http://87.89.194.28:4000/api/get').then((response) => {
+      setLogPlant(response.data)
+    });
+  }, []);
 
   const submitPlantValue = () => {
-    Axios.post('http://87.89.194.28:4000',{
+    Axios.post('http://87.89.194.28:2000/api/insert',{
     temperature: temperature,
     humidite: humidite,
     luminosite: luminosite,
@@ -36,6 +43,9 @@ function App() {
   <input type="number" name="luminosite" onChange={(e)=>
       setLuminosite(e.target.value)}/>
   <button onClick={submitPlantValue}>Submit</button>
+  {plantLogList.map((val) => {
+    return <h1> Temperature : {val.temperature} | luminosite : {val.luminosite} | humidite : {val.luminosite}</h1>
+  })}
   </div>
     </div>
   );

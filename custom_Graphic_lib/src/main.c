@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 
-extern uint8_t font[96][6];
-uint8_t    chosen_specie; //flag of chosen species
-uint8_t    transition;
+extern uint8_t      font[96][6];
+volatile uint8_t    chosen_specie; // =1 if a specie is chosen otherwise =0
+volatile char       g_lux[] = "\0\0\0\0";
+volatile char       g_mois[] = "\0\0\0\0";
+volatile char       g_temp[] = "\0\0\0\0\0";
 volatile uint8_t    choosing;
 
 
@@ -115,6 +117,7 @@ uint16_t  getTemperature() {
 }
 
 void    print_temp(uint16_t val) {
+    init_str(g_temp, 6);
     uint8_t *byte = &val;
     uint8_t temperature = (*byte & 0b01111111);
     uint8_t is_negative = (*byte >> 7) ? 1 : 0;
@@ -122,14 +125,19 @@ void    print_temp(uint16_t val) {
     uint8_t is_point_five = (*byte >> 7) ? 1 : 0;
     put_str("TEMPERATURE:        ", 0, 4);
     if(is_negative) {
-        put_str("-",12,4);
+        // put_str("-",12,4);
+        // g_temp[0] = '-';
     }
-    putnbr(temperature,13,4);
+    // putnbr(temperature,13,4);
+    ft_uitoa(temperature, g_temp, 6); // -> 6 car g_temp fait 6 caracteres max
     if(is_point_five) {
-        put_str(".5", (temperature < 10) ? 14 : 15,4);
+        append_str(g_temp, ".5");
+        // put_str(".5", (temperature < 10) ? 14 : 15,4);
     } else {
-        put_str(".0", (temperature < 10) ? 14 : 15,4);
+        // put_str(".0", (temperature < 10) ? 14 : 15,4);
+        append_str(g_temp, ".0");
     }
+    put_str(g_temp, 13, 4);
     put_str("oC", (temperature < 10) ? 16 : 17, 4);
     //test value temp fº specie arrow
 }
@@ -155,6 +163,8 @@ uint16_t read_moisture(){
     ADCSRA |= (1 << ADSC); // start calculations
     while((ADCSRA & (1 << ADSC))); // wait calculations is done
     mois = ADCL | (uint16_t)(ADCH & 0b11) << 8;
+    init_str(g_mois, 5);
+    ft_uitoa(mois, g_mois, 5);
     // putnbr(adch, 0, 4);
     // print_screen();
     // return (mois);
@@ -175,8 +185,6 @@ ISR(INT1_vect)
 
 void    display_info()
 {
-    uint16_t    lux;
-    uint16_t    mois;
     uint8_t     memory_species = 18 * (chosen_specie - 1);
     uint8_t     spec[8];
 
@@ -212,9 +220,19 @@ int       main() {
     ft_delay(F_CPU / 50);
     uart_strx1("AT+CIPSTART=\"TCP\",\"87.89.194.28\",4000\r\n");
     ft_delay(F_CPU / 50);
-    // char cmd[] = "GET /api/get HTTP/1.0\r\nHost: 87.89.194.28\r\n\r\n";
+    // char cmd[] = "GET /api/get HTTP/1.0\r\nHost: 87.89.194.28\r\n\r\n"; // GET http request example
+
+    // Complete POST request example :
     char cmd[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: 64\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"25\",\r\n\"humidite\":\"800\",\r\n\"luminosite\":\"500\"\r\n}";
-    char cmd_body[] = "";
+    char cmd1[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: ";
+    char cmd2[1]; // content(body) length
+    char cmd3[] = "\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"";
+    char cmd4[] = g_temp; // temperature value
+    char cmd5[] = "\",\r\n\"humidite\":\"";
+    char cmd6[1]; // humidite value
+    char cmd7[] = "\",\r\n\"luminosite\":\"";
+    char cmd8[1]; // luminosite value
+    char cmd9[] = "\"\r\n}";
     char tmp[3];
     sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd));
     uart_strx1(tmp);

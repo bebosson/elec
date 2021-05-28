@@ -68,3 +68,44 @@ void uart_putnbr8(uint8_t nb) {
 	else
 		uart_tx(nb + '0');
 }
+
+void ft_uitoa(uint16_t nb, char *str, uint8_t len)
+{
+    if (len > 0 && str) {
+        str[len - 1] = '\0';
+        if (*str) //Cas ou il y a un "-" (temperature negative)
+            str++;
+        if (nb == 0) {
+            str[0] = '0';
+            return ;
+        }
+        int j = 1;
+        if (nb > 9)
+            j = nb < 100 ? 2 : 3;
+        if (nb >= 1000)
+            j++;
+        while (--j >= 0)
+        {
+            str[j] = (nb % 10) + 48;
+            nb /= 10;
+        }
+    }
+}
+
+void append_str(char *dest, char *content) {
+    while(*dest) {
+        dest++;
+    }
+    while(*content) {
+        *dest = *content;
+        dest++;
+        content++;
+    }
+}
+
+
+void init_str(char *dest, uint8_t len) {
+    for (int i = 0; i < len; i++) {
+        dest[i] = '\0';
+    }
+}

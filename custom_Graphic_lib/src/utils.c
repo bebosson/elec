@@ -83,7 +83,7 @@ void ft_uitoa(uint16_t nb, char *str, uint8_t len)
         if (nb > 9)
             j = nb < 100 ? 2 : 3;
         if (nb >= 1000)
-            j++;
+            j = 4;
         while (--j >= 0)
         {
             str[j] = (nb % 10) + 48;
@@ -92,7 +92,7 @@ void ft_uitoa(uint16_t nb, char *str, uint8_t len)
     }
 }
 
-void append_str(char *dest, char *content) {
+char *append_str(char *dest, char *content) {
     while(*dest) {
         dest++;
     }
@@ -101,6 +101,7 @@ void append_str(char *dest, char *content) {
         dest++;
         content++;
     }
+    return (dest);
 }
 
 

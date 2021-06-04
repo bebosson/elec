@@ -66,7 +66,7 @@ uint8_t init_seq[] = {
     0x08d, 0x014,       /* [2] charge pump setting (p62): 0x014 enable, 0x010 disable, SSD1306 only, should be removed for SH1106 */
     0x020, 0x000,       /* page addressing mode */
     0x0a1,              /* segment remap a0/a1 */
-    0x0c8,              /* c0: scan dir normal, c8: reverse */
+    0x0c0,              /* c0: scan dir normal, c8: reverse */
     // 0x0da, 0x012,       /* com pin HW config, sequential com pin config (bit 4), disable left/right remap (bit 5) */
     // 0x081, 0x0cf,       /* [2] set contrast control */
     // 0x0d9, 0x0f1,       /* [2] pre-charge period 0x022/f1*/
@@ -121,7 +121,7 @@ void    put_str(char *str, char x, char y) {
     }
 }
 
-void putnbr(unsigned int nb, char x, char y) {
+void putnbr(unsigned long nb, char x, char y) {
     char *text = &buffer_text[y][x];
     if (nb >= 1000)
     {
@@ -185,7 +185,7 @@ void    print_screen() {
         }
         pixel_page[126] = 0;
         pixel_page[127] = 0;
-        for (int i = 0; i < 128; i++)
+        for (int i = 127; i >= 0; i--)
         {
             SPI_MasterTransmit(pixel_page[i]);
         }

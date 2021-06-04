@@ -7,7 +7,7 @@ volatile uint8_t    chosen_specie; // =1 if a specie is chosen otherwise =0
 volatile char       g_lux[] = "\0\0\0\0";
 volatile char       g_mois[] = "\0\0\0\0";
 volatile char       g_temp[] = "\0\0\0\0\0";
-volatile uint8_t    choosing;
+volatile uint8_t    choosing = 1;
 
 
 uint8_t   clean_transition()
@@ -39,6 +39,7 @@ void   navigation_button(uint8_t *x, uint8_t *y)
             transition_menu(x, y);
             *y = 3;
         }
+        ft_delay(F_CPU / 500);
 //        PIND ^= ~(1 << PD4); rebond ?
     }
     if (PIND & (1 << PD5)) // boutton du bas
@@ -51,19 +52,15 @@ void   navigation_button(uint8_t *x, uint8_t *y)
             *y = 7;
         }
 //        PIND ^= ~(1 << PD5); rebond ?
+        ft_delay(F_CPU / 500);
     }
 }
 
-void    render_title()
-{
-    put_str("CHOISISSEZ VOTRE", 2, 0);
-    put_str("ESPECE", 7, 1);
-}
-
-void    render_champ()
+void    render_menu()
 {
     uint8_t spec[8];
-    render_title();
+    put_str("CHOISISSEZ VOTRE", 2, 0);
+    put_str("ESPECE", 7, 1);
     eeprom_read_page(0, 8, spec);
     put_str(spec,0,3);
     eeprom_read_page(18, 8, spec);
@@ -74,12 +71,6 @@ void    render_champ()
     // put_str(specie,0,5);
     // put_str("CHAMP 4   ",0,6);
     // put_str("CHAMP 5   ",0,7);
-/*  put_str("CHAMP 6   ",10,3);
-    put_str("CHAMP 7   ",10,4);
-    put_str("CHAMP 8   ",10,5);
-    put_str("CHAMP 9   ",10,6);
-    put_str("CHAMP 10   ",10,7); */
-
 }
 
 void    display_menu() //choix espece
@@ -87,8 +78,8 @@ void    display_menu() //choix espece
     static uint8_t x = 8;
     static uint8_t y = 3;
     navigation_button(&x, &y);
-    render_champ();
-    put_str("<",x, y);
+    render_menu();
+    put_str("<", x, y);
     // if (PIND & (1 << PORT3))
     // {
         // ft_delay(F_CPU / 1000);
@@ -110,39 +101,26 @@ uint16_t  getTemperature() {
     while (i < TWI_BUFFER_LENGTH) {
         rx_data[i++] = 0;
     }
-    twi_writeTo(tx_address, 0x00, 1, true, true);
-    twi_readFrom(tx_address, &(rx_data[0]), 2, true);
-    twi_writeTo(tx_address, 0, 0, true, true);
-    return *(int16_t *)(rx_data);
+    twi_writeTo(tx_address, 0x00, 1, true, true); //get temperature
+    twi_readFrom(tx_address, rx_data, 2, true); //receive temperature
+    twi_writeTo(tx_address, 0, 0, true, true); //end of communication
+
+    return ((uint16_t)rx_data[0] << 8) | (rx_data[1]);
 }
 
-void    print_temp(uint16_t val) {
+void    print_temp(int16_t val) {
     init_str(g_temp, 6);
-    uint8_t *byte = &val;
-    uint8_t temperature = (*byte & 0b01111111);
-    uint8_t is_negative = (*byte >> 7) ? 1 : 0;
-    byte++;
-    uint8_t is_point_five = (*byte >> 7) ? 1 : 0;
-    put_str("TEMPERATURE:        ", 0, 4);
-    if(is_negative) {
-        // put_str("-",12,4);
-        // g_temp[0] = '-';
-    }
-    // putnbr(temperature,13,4);
-    ft_uitoa(temperature, g_temp, 6); // -> 6 car g_temp fait 6 caracteres max
-    if(is_point_five) {
-        append_str(g_temp, ".5");
-        // put_str(".5", (temperature < 10) ? 14 : 15,4);
-    } else {
-        // put_str(".0", (temperature < 10) ? 14 : 15,4);
-        append_str(g_temp, ".0");
-    }
-    put_str(g_temp, 13, 4);
-    put_str("oC", (temperature < 10) ? 16 : 17, 4);
-    //test value temp fº specie arrow
+    put_str("TEMPERATURE:         ", 0, 4);
+    if (val < 0)
+        put_str("-", 13, 4);
+    val &= ~(1 << 15); // clear neg bit
+    putnbr(val >> 8, 14, 4);
+    put_str(".", 15 + (val >> 8 >= 10) + (val >> 8 >= 100), 4);
+    putnbr(125 * ((val >> 5) & 7) / 100, 16 + (val >> 8 >= 10) + (val >> 8 >= 100), 4);
+    put_str("oC", 17 + (val >> 8 >= 10) + (val >> 8 >= 100), 4); 
 }
 
-uint16_t read_lux(){
+uint16_t read_lux() {
     uint16_t lux = 0;
     ADMUX &= ~(1 << MUX3);//set pin A3
     ADMUX &= ~(1 << MUX2);
@@ -151,6 +129,8 @@ uint16_t read_lux(){
     ADCSRA |= (1 << ADSC); // start calculations
         while((ADCSRA & (1 << ADSC))); // wait calculations is done
         lux = ADCL | (uint16_t)(ADCH & 0b11) << 8;
+    init_str(g_mois, 5);
+    ft_uitoa(lux, g_lux, 5);
     return (lux);
 }
 
@@ -176,17 +156,16 @@ uint16_t read_moisture(){
 ISR(INT1_vect)
 {
     clean_transition();
-    if (choosing) {
-        choosing = 0;
-    } else
-        choosing = 1;
-    ft_delay(F_CPU / 5000);
+    choosing = !choosing;
+    ft_delay(F_CPU / 750);
 }
 
 void    display_info()
 {
     uint8_t     memory_species = 18 * (chosen_specie - 1);
     uint8_t     spec[8];
+    uint16_t    lux;
+    uint16_t    mois;
 
     lux = read_lux();
     put_str("LUMINOSITE:         ", 0, 0);
@@ -203,43 +182,52 @@ void    display_info()
 
 
 int       main() {
-    bool    is_connected = false;
     EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
-    EIMSK |= (1 << INT1);
+    EIMSK |= (1 << INT1); //enable INT1 for Select button press
     ADCSRA |= (1 << ADEN); // enable ADC
     ADMUX |= (1 << REFS0); // AVCC with external capacitor at AREF pin
-    display_init(); //pin connected to screen
-    choosing = 1;
-    // eeprom_write_specie();
-    uart_init1();
     ft_delay(F_CPU / 50);
+    display_init(); //pin connected to screen
+    // eeprom_write_specie();
+    uart_init();
+    // ft_delay(F_CPU / 50);
     uart_strx1("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
     ft_delay(F_CPU / 10);
     uart_strx1("AT+CIPSTATUS\r\n");
     ft_delay(F_CPU / 50);
     uart_strx1("AT+CIPSTART=\"TCP\",\"87.89.194.28\",4000\r\n");
     ft_delay(F_CPU / 50);
-    // char cmd[] = "GET /api/get HTTP/1.0\r\nHost: 87.89.194.28\r\n\r\n"; // GET http request example
+    
+    uint8_t body_len = 18 + strlen(g_temp) + 16 + strlen(g_mois) + 18 + strlen(g_lux) + 4; // 18 -> {\r\n\"temperature\":\"
+    char cmd2[3] = "\0\0"; // content(body) length
+    ft_uitoa(body_len, cmd2, 3);
+
+    uint16_t cmd_len = 87 + 2 + 54 + body_len - 18;
 
     // Complete POST request example :
-    char cmd[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: 64\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"25\",\r\n\"humidite\":\"800\",\r\n\"luminosite\":\"500\"\r\n}";
-    char cmd1[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: ";
-    char cmd2[1]; // content(body) length
-    char cmd3[] = "\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"";
-    char cmd4[] = g_temp; // temperature value
-    char cmd5[] = "\",\r\n\"humidite\":\"";
-    char cmd6[1]; // humidite value
-    char cmd7[] = "\",\r\n\"luminosite\":\"";
-    char cmd8[1]; // luminosite value
-    char cmd9[] = "\"\r\n}";
-    char tmp[3];
-    sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd));
-    uart_strx1(tmp);
-    ft_delay(F_CPU / 500);
-    uart_strx1(cmd);
-    ft_delay(F_CPU / 20);
+    // char cmd[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: 64\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"25\",\r\n\"humidite\":\"800\",\r\n\"luminosite\":\"500\"\r\n}";
+    // char cmd[] = "GET /api/get HTTP/1.0\r\nHost: 87.89.194.28\r\n\r\n"; // GET http request example
 
+    char cmd1[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: ";
+    //cmd2 = body length
+    char cmd3[] = "\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"";
+    // g_temp
+    char cmd5[] = "\",\r\n\"humidite\":\"";
+    // g_mois
+    char cmd7[] = "\",\r\n\"luminosite\":\"";
+    // g_lux
+    char cmd9[] = "\"\r\n}";
+    char tmp[20];
+    char fcmd[250];
+    sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd_len));
+    uart_strx1(tmp);
+    ft_delay(F_CPU / 50);
+    
+    sprintf(fcmd, "%s%s%s%s%s%s%s%s%s", cmd1, cmd2, cmd3, g_temp, cmd5, g_mois, cmd7, g_lux, cmd9);
+    uart_strx1(fcmd);
+    
+    ft_delay(F_CPU / 20);
     while(1) {
         if (choosing == 1)
             display_menu();

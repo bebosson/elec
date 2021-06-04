@@ -192,11 +192,11 @@ int       main() {
     // eeprom_write_specie();
     uart_init();
     // ft_delay(F_CPU / 50);
-    uart_strx1("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
+    uart_strx("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
     ft_delay(F_CPU / 10);
-    uart_strx1("AT+CIPSTATUS\r\n");
+    uart_strx("AT+CIPSTATUS\r\n");
     ft_delay(F_CPU / 50);
-    uart_strx1("AT+CIPSTART=\"TCP\",\"87.89.194.28\",4000\r\n");
+    uart_strx("AT+CIPSTART=\"TCP\",\"87.89.194.28\",4000\r\n");
     ft_delay(F_CPU / 50);
     
     uint8_t body_len = 18 + strlen(g_temp) + 16 + strlen(g_mois) + 18 + strlen(g_lux) + 4; // 18 -> {\r\n\"temperature\":\"
@@ -221,11 +221,11 @@ int       main() {
     char tmp[20];
     char fcmd[250];
     sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd_len));
-    uart_strx1(tmp);
+    uart_strx(tmp);
     ft_delay(F_CPU / 50);
     
     sprintf(fcmd, "%s%s%s%s%s%s%s%s%s", cmd1, cmd2, cmd3, g_temp, cmd5, g_mois, cmd7, g_lux, cmd9);
-    uart_strx1(fcmd);
+    uart_strx(fcmd);
     
     ft_delay(F_CPU / 20);
     while(1) {

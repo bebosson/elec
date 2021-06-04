@@ -8,7 +8,7 @@ void    ft_delay(uint64_t delay) {
 void uart_init() {
 	// UCSR0A |= (1 << U2X0); // double the speed rate
 	/*Set baud rate */
-	UBRR0L = 8;
+	UBRR0L = 51;
 	/*Enable transmitter */
 	UCSR0B |= (1 << TXEN0);
 	/* Set frame format: 8data, 1stop bit */

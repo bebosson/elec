@@ -2,13 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
-extern uint8_t      font[96][6];
+// extern uint8_t      font[50][6];
 volatile uint8_t    chosen_specie; // =1 if a specie is chosen otherwise =0
-volatile char       g_lux[] = "\0\0\0\0";
-volatile char       g_mois[] = "\0\0\0\0";
-volatile char       g_temp[] = "\0\0\0\0\0";
 volatile uint8_t    choosing = 1;
-
 
 uint8_t   clean_transition()
 {
@@ -108,16 +104,21 @@ uint16_t  getTemperature() {
     return ((uint16_t)rx_data[0] << 8) | (rx_data[1]);
 }
 
-void    print_temp(int16_t val) {
+void    print_temp(int16_t val, char *g_temp) {
     init_str(g_temp, 6);
     put_str("TEMPERATURE:         ", 0, 4);
-    if (val < 0)
+    if (val < 0) {
+
         put_str("-", 13, 4);
+        g_temp[0] = '-';
+    }
     val &= ~(1 << 15); // clear neg bit
     putnbr(val >> 8, 14, 4);
+    ft_uitoa(val >> 8, g_temp, 6);
     put_str(".", 15 + (val >> 8 >= 10) + (val >> 8 >= 100), 4);
     putnbr(125 * ((val >> 5) & 7) / 100, 16 + (val >> 8 >= 10) + (val >> 8 >= 100), 4);
-    put_str("oC", 17 + (val >> 8 >= 10) + (val >> 8 >= 100), 4); 
+    ft_uitoa(125 * ((val >> 5) & 7) / 100, append_str(g_temp, "."), 2);
+    put_str("oC", 17 + (val >> 8 >= 10) + (val >> 8 >= 100), 4);
 }
 
 uint16_t read_lux() {
@@ -129,8 +130,7 @@ uint16_t read_lux() {
     ADCSRA |= (1 << ADSC); // start calculations
         while((ADCSRA & (1 << ADSC))); // wait calculations is done
         lux = ADCL | (uint16_t)(ADCH & 0b11) << 8;
-    init_str(g_mois, 5);
-    ft_uitoa(lux, g_lux, 5);
+    
     return (lux);
 }
 
@@ -143,8 +143,7 @@ uint16_t read_moisture(){
     ADCSRA |= (1 << ADSC); // start calculations
     while((ADCSRA & (1 << ADSC))); // wait calculations is done
     mois = ADCL | (uint16_t)(ADCH & 0b11) << 8;
-    init_str(g_mois, 5);
-    ft_uitoa(mois, g_mois, 5);
+    
     // putnbr(adch, 0, 4);
     // print_screen();
     // return (mois);
@@ -160,20 +159,24 @@ ISR(INT1_vect)
     ft_delay(F_CPU / 750);
 }
 
-void    display_info()
+void    display_info(char *g_lux, char *g_mois, char *g_temp)
 {
     uint8_t     memory_species = 18 * (chosen_specie - 1);
     uint8_t     spec[8];
     uint16_t    lux;
     uint16_t    mois;
 
-    lux = read_lux();
+    lux = read_lux(g_lux);
     put_str("LUMINOSITE:         ", 0, 0);
     putnbr(lux, 13, 0);
+    init_str(g_lux, 5);
+    ft_uitoa(lux, g_lux, 5);
     mois = read_moisture();
     put_str("HUMIDITE:       % ", 0, 2);
     putnbr(mois, 13, 2);
-    print_temp(getTemperature());
+    init_str(g_mois, 5);
+    ft_uitoa(mois, g_mois, 5);
+    print_temp(getTemperature(), g_temp);
     put_str("ESPECE:   ", 0, 6);
     eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
     put_str(spec, 11, 6);
@@ -182,6 +185,10 @@ void    display_info()
 
 
 int       main() {
+    uint16_t cptr = 890;
+    char g_lux[5] = "\0\0\0\0";
+    char g_mois[5] = "\0\0\0\0";
+    char g_temp[6] = "\0\0\0\0\0";
     EICRA |= (1 << ISC10) | (1 << ISC11);
     SREG |= 1 << SREG_I; //allows interrupt
     EIMSK |= (1 << INT1); //enable INT1 for Select button press
@@ -191,49 +198,23 @@ int       main() {
     display_init(); //pin connected to screen
     // eeprom_write_specie();
     uart_init();
-    // ft_delay(F_CPU / 50);
-    uart_strx("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
-    ft_delay(F_CPU / 10);
-    uart_strx("AT+CIPSTATUS\r\n");
     ft_delay(F_CPU / 50);
-    uart_strx("AT+CIPSTART=\"TCP\",\"87.89.194.28\",4000\r\n");
-    ft_delay(F_CPU / 50);
-    
-    uint8_t body_len = 18 + strlen(g_temp) + 16 + strlen(g_mois) + 18 + strlen(g_lux) + 4; // 18 -> {\r\n\"temperature\":\"
-    char cmd2[3] = "\0\0"; // content(body) length
-    ft_uitoa(body_len, cmd2, 3);
-
-    uint16_t cmd_len = 87 + 2 + 54 + body_len - 18;
-
-    // Complete POST request example :
-    // char cmd[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: 64\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"25\",\r\n\"humidite\":\"800\",\r\n\"luminosite\":\"500\"\r\n}";
-    // char cmd[] = "GET /api/get HTTP/1.0\r\nHost: 87.89.194.28\r\n\r\n"; // GET http request example
-
-    char cmd1[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: ";
-    //cmd2 = body length
-    char cmd3[] = "\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"";
-    // g_temp
-    char cmd5[] = "\",\r\n\"humidite\":\"";
-    // g_mois
-    char cmd7[] = "\",\r\n\"luminosite\":\"";
-    // g_lux
-    char cmd9[] = "\"\r\n}";
-    char tmp[20];
-    char fcmd[250];
-    sprintf(tmp, "AT+CIPSEND=%d\r\n", strlen(cmd_len));
-    uart_strx(tmp);
-    ft_delay(F_CPU / 50);
-    
-    sprintf(fcmd, "%s%s%s%s%s%s%s%s%s", cmd1, cmd2, cmd3, g_temp, cmd5, g_mois, cmd7, g_lux, cmd9);
-    uart_strx(fcmd);
-    
-    ft_delay(F_CPU / 20);
     while(1) {
         if (choosing == 1)
             display_menu();
-        else
-            display_info();
-        ft_delay(F_CPU / 1000);
+        else {
+            display_info(g_lux, g_mois, g_temp);
+            if (cptr++ == 900) {
+                put_str(g_lux, 0, 1);
+                put_str(g_temp, 0, 5);
+                put_str(g_mois, 0, 3);
+                
+                print_screen();
+                esp_send_data(g_lux, g_temp, g_mois);
+                cptr = 0;
+            }
+        }
+        ft_delay(F_CPU / 1000); 
     }
     return 0;
 }

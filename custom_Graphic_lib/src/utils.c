@@ -1,5 +1,6 @@
 #include <inttypes.h>
 #include <avr/io.h>
+#include "screen.h"
 
 void    ft_delay(uint64_t delay) {
     while (delay--){};
@@ -11,6 +12,7 @@ void uart_init() {
 	UBRR0L = 51;
 	/*Enable transmitter */
 	UCSR0B |= (1 << TXEN0);
+    UCSR0B |= (1 << RXEN0); 
 	/* Set frame format: 8data, 1stop bit */
 	UCSR0C = (1 << UCSZ00) | (1 << UCSZ01); //8data
 }

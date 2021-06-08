@@ -6,6 +6,7 @@
 #include "screen.h"
 #include "eeprom.h"
 #include "avr/io.h"
+#include "esp.h"
 
 
 #define DEFAULT_I2C_ADDRESS 0x48;

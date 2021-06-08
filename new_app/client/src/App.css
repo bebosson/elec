@@ -1,6 +1,11 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
+
+.body {
+
+}
+
 .form {
   display:flex;
   flex-direction: column;
@@ -8,9 +13,32 @@
   justify-content: center;
 }
 
-.form input{
-  width: 300px;
-  height: 60px;
-  margin: 10px;
-  font-size: 25px;
+#root {
+    margin:auto!important;
+    width:550px!important;
 }
+
+h3 {
+    margin-top: -10px!important;
+    margin-bottom: 1.5em!important;
+}
+
+/* .recharts-wrapper {
+    width: 100%!important;
+    max-width: 1000px;
+    height: auto!important;
+
+} */
+/*
+.recharts-tooltip-wrapper {
+    /* left: 100px!important;
+    bottom: -50px!important;
+    top:auto!important;
+    transform: none!important;
+}*/
+
+
+/* .recharts-surface {
+    width: 100%!important;
+    height: auto!important;
+} */

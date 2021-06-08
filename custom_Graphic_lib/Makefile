@@ -3,7 +3,7 @@ OBJCPY=avr-objcopy
 CFLAGS= -std=c99 -Wall -ffunction-sections
 DUDE = avrdude
 F_CPU=8000000
-PORT=/dev/cu.SLAB_USBtoUART
+PORT=/dev/cu.usbserial-FTHHXGCT
 MCU = atmega328pb 
 
 SRC_DIR := src
@@ -18,13 +18,13 @@ LDLIBS := -lm
 LDFLAGS  := -Llib
 
 CDEFS = -DF_CPU=$(F_CPU)UL
-ALL_CFLAGS = $(CFLAGS) -Iinclude -mmcu=$(MCU) $(CDEFS)
-SCREEN_PID := $(shell ps -t cu.SLAB_USBtoUART | tail -n1 | awk '{print $$1}')
+ALL_CFLAGS = $(CFLAGS) -Iinclude -mmcu=$(MCU) $(CDEFS) #-Os ou O3 ?
+SCREEN_PID := $(shell ps -t cu.usbserial-FTHHXGCT | tail -n1 | awk '{print $$1}')
 
-all: $(EXE) hex flash
+all: $(EXE).hex flash
 
-$(EXE): $(OBJ) | $(BIN_DIR)
-	$(CC) $(LDFLAGS) $(ALL_CFLAGS) $^ $(LDLIBS) -o $@.bin
+$(EXE).bin : $(OBJ) | $(BIN_DIR)
+	$(CC) $(LDFLAGS) $(ALL_CFLAGS) $^ $(LDLIBS) -o $@
 
 $(BIN_DIR):
 	mkdir -p $@
@@ -32,7 +32,7 @@ $(BIN_DIR):
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(ALL_CFLAGS) -c $< -o $@
 
-hex: 
+$(EXE).hex: $(EXE).bin 
 	$(OBJCPY) -j .text -j .data -O ihex $(EXE).bin $(EXE).hex
 	avr-size --format=avr --mcu=$(MCU) $(EXE).bin
 flash:
@@ -47,4 +47,4 @@ ks:
 
 reks: ks all
 
-.PHONY: all hex flash clean
+.PHONY: all flash clean

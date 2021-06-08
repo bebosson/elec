@@ -18,9 +18,9 @@ S 9200 1875 950  500
 U 60991DCA
 F0 "connecteur_isp" 50
 F1 "Connector_ISP.sch" 50
-F2 "MISO" I L 9200 1975 50 
+F2 "MISO-TX" I L 9200 1975 50 
 F3 "SCK" I L 9200 2175 50 
-F4 "MOSI" I L 9200 2075 50 
+F4 "MOSI-RX" I L 9200 2075 50 
 F5 "RST" I L 9200 2275 50 
 $EndSheet
 NoConn ~ 3500 3575
@@ -486,25 +486,21 @@ Wire Wire Line
 	4700 2775 4850 2775
 Text Label 4850 2775 0    50   ~ 0
 HUM
-Wire Wire Line
-	9200 1975 8850 1975
-Text Label 8850 2075 0    50   ~ 0
+Text Label 8675 2075 0    50   ~ 0
 ISP_MISO-RX
 Wire Wire Line
 	4700 1975 4900 1975
 Text Label 4900 1975 0    50   ~ 0
 ISP_MOSI
 Wire Wire Line
-	9200 2075 8850 2075
-Text Label 8850 1975 0    50   ~ 0
-ISP_MOSI-TX
+	9200 2075 8675 2075
 Wire Wire Line
 	4700 2075 4900 2075
 Text Label 4900 2075 0    50   ~ 0
 ISP_MISO
 Wire Wire Line
-	9200 2175 8850 2175
-Text Label 8850 2175 0    50   ~ 0
+	9200 2175 8675 2175
+Text Label 8675 2175 0    50   ~ 0
 ISP_SCK
 Wire Wire Line
 	4700 2175 4900 2175
@@ -989,4 +985,8 @@ F 3 "~" H 7050 3475 50  0001 C CNN
 	1    7050 3475
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	9200 1975 8675 1975
+Text Label 8675 1975 0    50   ~ 0
+ISP_MOSI-TX
 $EndSCHEMATC

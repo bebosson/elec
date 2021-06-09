@@ -23,25 +23,25 @@ SCREEN_PID := $(shell ps -t cu.usbserial-FTHHXGCT | tail -n1 | awk '{print $$1}'
 
 all: $(EXE).hex flash
 
-$(EXE).bin : $(OBJ) | $(BIN_DIR)
-	$(CC) $(LDFLAGS) $(ALL_CFLAGS) $^ $(LDLIBS) -o $@
+$(EXE).bin : $(OBJ)
+	@mkdir -p $(BIN_DIR)
+	@$(CC) $(LDFLAGS) $(ALL_CFLAGS) $^ $(LDLIBS) -o $@
 
-$(BIN_DIR):
-	mkdir -p $@
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	$(CC) $(ALL_CFLAGS) -c $< -o $@
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(ALL_CFLAGS) -c $< -o $@
 
-$(EXE).hex: $(EXE).bin 
+$(EXE).hex: $(EXE).bin
 	$(OBJCPY) -j .text -j .data -O ihex $(EXE).bin $(EXE).hex
 	avr-size --format=avr --mcu=$(MCU) $(EXE).bin
 flash:
 		$(DUDE) -v -p $(MCU) -c arduino -P $(PORT) -b 57600 -U flash:w:$(EXE).hex:i
 clean:
-	rm $(OBJ_DIR)/*.o
+	rm -rf $(OBJ_DIR)
 fclean:
-	rm $(BIN_DIR)/*
-re: clean fclean all
+	rm -rf $(BIN_DIR) $(OBJ_DIR)
+re: fclean all
 ks:
 	kill -3 $(SCREEN_PID)
 

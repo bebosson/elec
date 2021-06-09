@@ -61,9 +61,9 @@ void    render_menu()
     put_str("CHOISISSEZ VOTRE", 2, 0);
     put_str("ESPECE", 7, 1);
     eeprom_read_page(0, 8, spec);
-    put_str(spec,0,3);
+    put_str((char *)spec,0,3);
     eeprom_read_page(18, 8, spec);
-    put_str(spec,0,4);
+    put_str((char *)spec,0,4);
     // eeprom_read_page(18, 18, specie);
     // put_str(specie,0,4);
     // eeprom_read_page(36, 18, specie);
@@ -86,7 +86,7 @@ void    display_menu() //choix espece
         // return;
     // }
     print_screen();
-    return (0);
+    return ;
 }
 
 
@@ -187,7 +187,7 @@ void    display_info(char *g_lux, char *g_mois, char *g_temp)
     print_temp(getTemperature(), g_temp);
     put_str("ESPECE:   ", 0, 6);
     eeprom_read_page(memory_species, 8, spec); // recuperer dans la memoire l'espece choisi
-    put_str(spec, 11, 6);
+    put_str((char *)spec, 11, 6);
     print_screen();
 }
 

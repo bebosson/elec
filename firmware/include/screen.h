@@ -26,5 +26,7 @@ void    put_str(char *str, char x, char y);
 void	SPI_MasterTransmit(char cData);
 void    display_init();
 void    clear_screen();
+void    print_screen();
+void    clear_buffer();
 
 #endif

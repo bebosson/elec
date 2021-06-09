@@ -53,28 +53,28 @@ void    init_species(uint8_t *species)
     // species[5] = 'S';
  
     
-    memcpy(species, "CACTUS\0\0", 8);
-    memcpy(species + 8, 0, 1);
-    memcpy(species + 9, 200, 1);
-    memcpy(species + 10, 0, 1);
-    memcpy(species + 11, 120, 1);
-    memcpy(species + 12, 30, 1);
-    memcpy(species + 13, 24, 1);
-    memcpy(species + 14, (uint8_t)(600 >> 8), 1);
-    memcpy(species + 15, (uint8_t)600, 1);
-    memcpy(species + 16, (uint8_t)(300 >> 8), 1);
-    memcpy(species + 17, (uint8_t)300, 1);
-    memcpy(species + 18, "PETUNIA\0", 8);
-    memcpy(species + 18 + 8, 0, 1);
-    memcpy(species + 18 + 9, 200, 1);
-    memcpy(species + 18 + 10, 0, 1);
-    memcpy(species + 18 + 11, 120, 1);
-    memcpy(species + 18 + 12, 30, 1);
-    memcpy(species + 18 + 13, 24, 1);
-    memcpy(species + 18 + 14, (uint8_t)(600 >> 8), 1);
-    memcpy(species + 18 + 15, (uint8_t)600, 1);
-    memcpy(species + 18 + 16, (uint8_t)(300 >> 8), 1);
-    memcpy(species + 18 + 17, (uint8_t)300, 1);
+    // memcpy(species, "CACTUS\0\0", 8);
+    // memcpy(species + 8, 0, 1);
+    // memcpy(species + 9, 200, 1);
+    // memcpy(species + 10, 0, 1);
+    // memcpy(species + 11, 120, 1);
+    // memcpy(species + 12, 30, 1);
+    // memcpy(species + 13, 24, 1);
+    // memcpy(species + 14, (uint8_t)(600 >> 8), 1);
+    // memcpy(species + 15, (uint8_t)600, 1);
+    // memcpy(species + 16, (uint8_t)(300 >> 8), 1);
+    // memcpy(species + 17, (uint8_t)300, 1);
+    // memcpy(species + 18, "PETUNIA\0", 8);
+    // memcpy(species + 18 + 8, 0, 1);
+    // memcpy(species + 18 + 9, 200, 1);
+    // memcpy(species + 18 + 10, 0, 1);
+    // memcpy(species + 18 + 11, 120, 1);
+    // memcpy(species + 18 + 12, 30, 1);
+    // memcpy(species + 18 + 13, 24, 1);
+    // memcpy(species + 18 + 14, (uint8_t)(600 >> 8), 1);
+    // memcpy(species + 18 + 15, (uint8_t)600, 1);
+    // memcpy(species + 18 + 16, (uint8_t)(300 >> 8), 1);
+    // memcpy(species + 18 + 17, (uint8_t)300, 1);
 }
 
 

@@ -18,7 +18,7 @@ LDLIBS := -lm
 LDFLAGS  := -Llib
 
 CDEFS = -DF_CPU=$(F_CPU)UL
-ALL_CFLAGS = $(CFLAGS) -Iinclude -mmcu=$(MCU) $(CDEFS) #-Os ou O3 ?
+ALL_CFLAGS = $(CFLAGS) -Iinclude -mmcu=$(MCU) $(CDEFS) -O1 #-Os ou O3 ?
 SCREEN_PID := $(shell ps -t cu.usbserial-FTHHXGCT | tail -n1 | awk '{print $$1}')
 
 all: $(EXE).hex flash
@@ -33,10 +33,10 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	@$(CC) $(ALL_CFLAGS) -c $< -o $@
 
 $(EXE).hex: $(EXE).bin
-	$(OBJCPY) -j .text -j .data -O ihex $(EXE).bin $(EXE).hex
-	avr-size --format=avr --mcu=$(MCU) $(EXE).bin
+	@$(OBJCPY) -j .text -j .data -O ihex $(EXE).bin $(EXE).hex
+	@avr-size --format=avr --mcu=$(MCU) $(EXE).bin
 flash:
-		$(DUDE) -v -p $(MCU) -c arduino -P $(PORT) -b 57600 -U flash:w:$(EXE).hex:i
+		@$(DUDE) -v -p $(MCU) -c arduino -P $(PORT) -b 57600 -U flash:w:$(EXE).hex:i
 clean:
 	rm -rf $(OBJ_DIR)
 fclean:

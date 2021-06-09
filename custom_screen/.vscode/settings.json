@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "u8x8.h": "c",
-        "stdint.h": "c",
-        "stddef.h": "c"
-    }
-}

@@ -4,6 +4,7 @@
 #include <util/delay.h>
 
 // extern uint8_t      font[50][6];
+char water_pump = 0;
 volatile uint8_t    chosen_specie; // =1 if a specie is chosen otherwise =0
 volatile uint8_t    menuid = 1;
 volatile uint8_t    btn_press = 0;
@@ -138,6 +139,10 @@ uint16_t read_lux() {
 
 uint16_t read_moisture(){
     uint16_t mois = 0;
+    uint16_t v_sec = 896;
+    uint16_t v_humide = 448;
+    uint16_t diff = v_sec - v_humide;
+
     ADMUX |= (1 << MUX1); // set ADC2
     ADMUX &= ~(1 << MUX0);
     ADMUX &= ~(1 << MUX2);
@@ -145,13 +150,16 @@ uint16_t read_moisture(){
     ADCSRA |= (1 << ADSC); // start calculations
     while((ADCSRA & (1 << ADSC))); // wait calculations is done
     mois = ADCL | (uint16_t)(ADCH & 0b11) << 8;
-    
+    mois = ( v_sec - mois ) * 100 / diff;
+    water_pump = (mois < 25) ? 1 : 0; 
+
     // putnbr(adch, 0, 4);
     // print_screen();
     // return (mois);
     // return ((100 - ((mois * 100 / 1023) / 100)));
-    //return (mois);
-    return ((1023 - mois) / 5);
+    // return (mois);
+//    return ((1023 - mois) / 5);
+      return (mois);
 }
 
 __attribute__ ((signal)) void INT1_vect()
@@ -194,6 +202,8 @@ int       main() {
     EIMSK |= (1 << INT1); //enable INT1 for Select button press
     ADCSRA |= (1 << ADEN); // enable ADC
     ADMUX |= (1 << REFS0); // AVCC with external capacitor at AREF pin
+    DDRD |= (1 << PD2); // POMPE
+    PORTD |= (1 << PD2);
     ft_delay(F_CPU / 50);
     display_init(); //pin connected to screen
     // eeprom_write_specie();
@@ -210,7 +220,7 @@ int       main() {
             display_menu();
         else {
             display_info(g_lux, g_mois, g_temp);
-            if (cptr++ == 900) {
+            if (cptr++ == 9000) {
                 put_str("SENDING!", 0, 7);
                 print_screen();
                 esp_send_data(g_lux, g_temp, g_mois);

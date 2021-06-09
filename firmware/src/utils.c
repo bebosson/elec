@@ -29,6 +29,14 @@ void uart_strx(char *str) {
     }
 }
 
+// char uart_rx()
+// {
+//     /* Wait for data to be received */
+//     while (!(UCSR0A & (1 << RXC)));
+//     /* Get and return received data from buffer */
+//     return UDR0;
+// }
+
 void uart_init1() {
 	// UCSR0A |= (1 << U2X0); // double the speed rate
 	/*Set baud rate */

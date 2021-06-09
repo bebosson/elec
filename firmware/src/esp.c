@@ -1,3 +1,4 @@
+#include "main.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,7 +10,8 @@ extern volatile char       g_temp[6];
 void    esp_send_data(char *g_lux, char *g_temp, char *g_mois) {
     ft_delay(F_CPU / 500);
     // uart_strx("AT+CWJAP_CUR=\"iPhone\",\"Pedro900\"\r\n");
-    uart_strx("AT+CWJAP_CUR=\"Pixel_6023\",\"92itn65rmnq5ij\"\r\n");
+    // uart_strx("AT+CWJAP_CUR=\"Pixel_6023\",\"92itn65rmnq5ij\"\r\n");
+    uart_strx("AT+CWJAP_CUR=\"beboss\",\"petitchat\"\r\n");
     ft_delay(F_CPU / 8);
     uart_strx("AT+CIPSTATUS\r\n");
     ft_delay(F_CPU / 30);
@@ -29,7 +31,7 @@ void    esp_send_data(char *g_lux, char *g_temp, char *g_mois) {
     char cmd1[] = "POST /api/insert HTTP/1.0\r\nHost: 87.89.194.28\r\nConnection: keep-alive\r\nContent-Length: ";
     //cmd2 = body length
     char cmd3[] = "\r\nContent-Type: application/json\r\n\r\n{\r\n\"temperature\":\"";
-    char test[] = "{\r\n\"temperature\":\"";
+    // char test[] = "{\r\n\"temperature\":\"";
     char cmd5[] = "\",\r\n\"humidite\":\"";
     char cmd7[] = "\",\r\n\"luminosite\":\"";
     char cmd9[] = "\"\r\n}";

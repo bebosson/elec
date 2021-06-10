@@ -154,7 +154,14 @@ void putnbr(unsigned long nb, char x, char y) {
         *text++ = nb + 27;
 }
 
-
+void SPI_MasterTransmit(char cData)
+{
+    /* Start transmission */
+    SPDR1 = cData;
+    /* Wait for transmission complete */
+    while(!(SPSR1 & (1<<SPIF)))
+    ;
+}
 
 void    clear_buffer() {
     for (int j = 0; j < 8; j++)
@@ -162,12 +169,6 @@ void    clear_buffer() {
         for (int i = 0; i < 21; i++)
             buffer_text[j][i] = 0;
     }
-}
-
-void    clear_screen() {
-    reload_screen = 1;
-    clear_buffer();
-    print_screen();
 }
 
 void    print_screen() {
@@ -200,13 +201,10 @@ void    print_screen() {
     reload_screen = 0;
 }
 
-void SPI_MasterTransmit(char cData)
-{
-    /* Start transmission */
-    SPDR1 = cData;
-    /* Wait for transmission complete */
-    while(!(SPSR1 & (1<<SPIF)))
-    ;
+void    clear_screen() {
+    reload_screen = 1;
+    clear_buffer();
+    print_screen();
 }
 
 void    display_init() {

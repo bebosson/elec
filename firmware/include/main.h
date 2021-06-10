@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include "avr/interrupt.h"
 #include <inttypes.h>
 #include "twi.h"
 #include "utils.h"

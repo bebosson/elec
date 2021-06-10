@@ -220,7 +220,7 @@ int       main() {
             display_menu();
         else {
             display_info(g_lux, g_mois, g_temp);
-            if (cptr++ == 900) {
+            if (cptr++ == 1800) {
                 put_str("SENDING!", 0, 7);
                 print_screen();
                 esp_send_data(g_lux, g_temp, g_mois);

@@ -1,18 +1,3 @@
-/*
-  twi.h - TWI/I2C library for Wiring & Arduino
-  Copyright (c) 2006 Nicholas Zambetti.  All right reserved.
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
 
 #ifndef twi_h
 #define twi_h
@@ -46,14 +31,11 @@
     void twi_stop(void);
     void twi_releaseBus(void);
 
-    // https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/util/twi.h 
     #include <avr/io.h>
 
     /** \file */
-    /** \defgroup util_twi <util/twi.h>: TWI bit mask definitions
-        \code #include <util/twi.h> \endcode
-        This header file contains bit mask definitions for use with
-        the AVR TWI interface.
+    /** \defgroup TWI bit mask definitions
+        \code #include "twi.h" \endcode
     */
     /** \name TWSR values
      Mnemonics:
